@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "260873370791",
+    "project_id": "healthy-lifestyle-5fee5",
+    "storage_bucket": "healthy-lifestyle-5fee5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:260873370791:android:6946d5b5fb962249dd2f82",
+        "android_client_info": {
+          "package_name": "com.tm471a.intelligenthealthylifestyle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqvq5xnAj4nYkvr0RfvTqKNCxDTy7jz-s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

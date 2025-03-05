@@ -1,10 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.services)
 }
 
 android {
     namespace 'com.tm471a.intelligenthealthylifestyle'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.tm471a.intelligenthealthylifestyle"
@@ -26,6 +27,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -36,6 +40,11 @@ dependencies {
     implementation libs.constraintlayout
     implementation libs.firebase.auth
     implementation libs.firebase.firestore
+    implementation libs.firebase.bom
+    implementation libs.google.services
+    implementation libs.lifecycle.viewmodel.ktx
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core

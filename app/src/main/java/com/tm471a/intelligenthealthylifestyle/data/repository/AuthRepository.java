@@ -8,26 +8,75 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.tm471a.intelligenthealthylifestyle.data.model.User;
 import com.tm471a.intelligenthealthylifestyle.utils.Resource;
 
+import java.util.ArrayList;
+
 
 public class AuthRepository {
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public LiveData<Resource<User>> loginUser(String email, String password) {
-        MutableLiveData<Resource<User>> result = new MutableLiveData<>();
+    public interface LoginCallback {
+        void onSuccess(User user);
+        void onError(String message);
+    }
+
+    public void loginUser(String email, String password, LoginCallback callback) {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // Fetch user data from Firestore
-                        db.collection("Users").document(auth.getUid())
-                                .get().addOnSuccessListener(documentSnapshot -> {
-                                    User user = documentSnapshot.toObject(User.class);
-                                    result.postValue(Resource.success(user));
-                                });
+                        fetchUserData(auth.getCurrentUser().getUid(), callback);
                     } else {
-                        result.postValue(Resource.error("Login failed", null));
+                        callback.onError(task.getException() != null ?
+                                task.getException().getMessage() :
+                                "Login failed");
                     }
                 });
-        return result;
+    }
+
+    private void fetchUserData(String uid, LoginCallback callback) {
+        db.collection("Users").document(uid)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    User user = documentSnapshot.toObject(User.class);
+                    if (user != null) {
+                        callback.onSuccess(user);
+                    } else {
+                        callback.onError("User data not found");
+                    }
+                })
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
+    }
+    // Add interface
+    public interface SignupCallback {
+        void onSuccess(User user);
+        void onError(String message);
+    }
+
+    // Add method
+    public void registerUser(String name, String email, String password,
+                             double height, double weight, SignupCallback callback) {
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        User user = new User(
+                                auth.getCurrentUser().getUid(),
+                                name,
+                                email,
+                                height,
+                                weight,
+                                new ArrayList<>(), // fitnessGoals
+                                new ArrayList<>()  // dietaryPreferences
+                        );
+
+                        db.collection("Users").document(user.getUid())
+                                .set(user)
+                                .addOnSuccessListener(aVoid -> callback.onSuccess(user))
+                                .addOnFailureListener(e -> callback.onError(e.getMessage()));
+                    } else {
+                        callback.onError(task.getException() != null ?
+                                task.getException().getMessage() :
+                                "Registration failed");
+                    }
+                });
     }
 }
