@@ -15,7 +15,7 @@ public class WorkoutRepository {
     private final MutableLiveData<List<WorkoutPlan>> workoutPlans = new MutableLiveData<>();
 
     public LiveData<List<WorkoutPlan>> getWorkoutPlans(String userId) {
-        db.collection("users").document(userId)
+        db.collection("Users").document(userId)
                 .collection("workout_plans")
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {

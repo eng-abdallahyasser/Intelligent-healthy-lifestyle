@@ -1,5 +1,7 @@
 package com.tm471a.intelligenthealthylifestyle.data.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class User {
@@ -26,7 +28,7 @@ public class User {
     }
 
     // Getters and setters
-
+    @NonNull
     public String getUid() {
         return uid;
     }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Name"/>
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"/>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_height"
+            android:inputType="numberDecimal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Height"/>
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_weight"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Weight"/>
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cbMuscleGain"
+                android:text="Muscle Gain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cbWeightLoss"
+                android:text="Weight Loss"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <!-- Dietary Preferences Checkboxes -->
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cbVegetarian"
+                android:text="Vegetarian"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/cbEndurance"
+            android:text="Endurance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/cbVegan"
+            android:text="Vegan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/cbGlutenFree"
+            android:text="Gluten Free"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Changes"
+            android:layout_marginTop="24dp"/>
+
+    </LinearLayout>
+</ScrollView>

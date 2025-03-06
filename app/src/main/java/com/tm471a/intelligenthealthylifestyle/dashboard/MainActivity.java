@@ -2,6 +2,7 @@ package com.tm471a.intelligenthealthylifestyle.dashboard;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,9 +13,16 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.tm471a.intelligenthealthylifestyle.LauncherActivity;
 import com.tm471a.intelligenthealthylifestyle.R;
 import com.tm471a.intelligenthealthylifestyle.databinding.ActivityMainBinding;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -34,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
             redirectToLauncher();
             return;
         }
+//        addSampleWorkoutPlan();
+//        addSampleWorkoutPlan();
+//        addSampleWorkoutPlan();
+//        addSampleWorkoutPlan();
 
         setupNavigation();
     }
@@ -84,5 +96,36 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         return navController.navigateUp() || super.onSupportNavigateUp();
+    }
+
+    public void addSampleWorkoutPlan() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        // Create sample exercise
+        Map<String, Object> exercise1 = new HashMap<>();
+        exercise1.put("name", "Push-ups");
+        exercise1.put("primary_muscles", Arrays.asList("Chest", "Triceps"));
+        exercise1.put("equipment", Collections.singletonList("None"));
+        exercise1.put("sets", 3);
+        exercise1.put("reps", 12);
+
+        // Create workout plan document
+        Map<String, Object> workoutPlan = new HashMap<>();
+        workoutPlan.put("plan_name", "Beginner Strength");
+        workoutPlan.put("duration", "4 Weeks");
+        workoutPlan.put("difficulty", "Beginner");
+        workoutPlan.put("exercises", Arrays.asList(exercise1));
+
+        // Add to Firestore
+        FirebaseFirestore.getInstance()
+                .collection("Users")
+                .document(user.getUid())
+                .collection("workout_plans")
+                .add(workoutPlan)
+                .addOnSuccessListener(documentReference ->
+                        Log.d("FIREBASE", "Added sample workout plan"))
+                .addOnFailureListener(e ->
+                        Log.e("FIREBASE", "Error adding plan", e));
     }
 }
