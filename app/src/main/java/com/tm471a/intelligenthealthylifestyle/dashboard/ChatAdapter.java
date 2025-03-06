@@ -1,5 +1,6 @@
 package com.tm471a.intelligenthealthylifestyle.dashboard;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,6 +118,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     // Adapter methods
+    @SuppressLint("NotifyDataSetChanged")
     public void submitList(List<ChatMessage> newMessages) {
         messages.clear();
         messages.addAll(newMessages);

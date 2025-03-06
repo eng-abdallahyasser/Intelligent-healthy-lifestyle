@@ -1,5 +1,6 @@
 package com.tm471a.intelligenthealthylifestyle.dashboard;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +14,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.tm471a.intelligenthealthylifestyle.data.model.ChatMessage;
 import com.tm471a.intelligenthealthylifestyle.databinding.FragmentAssistantBinding;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
+
 public class AssistantFragment extends Fragment {
 
     private FragmentAssistantBinding binding;
     private AssistantViewModel viewModel;
+    ChatAdapter adapter = new ChatAdapter();
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -32,17 +39,14 @@ public class AssistantFragment extends Fragment {
 
     private void setupChat() {
         // Initialize
-        ChatAdapter adapter = new ChatAdapter();
+        viewModel.addMessage(new ChatMessage("Hello!", false));
+        viewModel.addMessage(new ChatMessage("Hi there!", true));
+        viewModel.addMessage(new ChatMessage("How can I help you today?", true));
+
+
         binding.rvMessages.setAdapter(adapter);
         binding.rvMessages.setLayoutManager(new LinearLayoutManager(getContext()));
-
-// Add messages
-        adapter.addMessage(new ChatMessage("Hello!", false));
-        adapter.showLoading(); // Show loading indicator
-
-// When response received
-        adapter.hideLoading();
-        adapter.addMessage(new ChatMessage("Hi there!", true));
+        adapter.submitList(viewModel.getMessages().getValue());
 
         binding.btnSend.setOnClickListener(v -> {
             String message = binding.etMessage.getText().toString();
@@ -53,9 +57,11 @@ public class AssistantFragment extends Fragment {
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void setupObservers() {
         viewModel.getMessages().observe(getViewLifecycleOwner(), messages -> {
-            binding.rvMessages.getAdapter().notifyDataSetChanged();
+            adapter.submitList(messages);
+            Objects.requireNonNull(binding.rvMessages.getAdapter()).notifyDataSetChanged();
             binding.rvMessages.scrollToPosition(messages.size() - 1);
         });
 
