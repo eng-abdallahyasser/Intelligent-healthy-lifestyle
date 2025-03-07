@@ -34,8 +34,6 @@ public class AssistantRepository {
                     chatHistory.postValue(new ArrayList<>(messages));
                     callback.onResponse(response);
                 })
-                .addOnFailureListener(e -> {
-                    callback.onError(e.getMessage());
-                });
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 }

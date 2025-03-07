@@ -25,8 +25,10 @@ public class AssistantViewModel extends ViewModel {
                 ChatMessage userMsg = new ChatMessage(message, false);
                 ChatMessage botMsg = new ChatMessage(response != null ? response :"I'm sorry, I didn't understand that", true);
                 List<ChatMessage> current = messages.getValue();
-                current.add(userMsg);
-                current.add(botMsg);
+                if (current != null) {
+                    current.add(userMsg);
+                    current.add(botMsg);
+                }
                 messages.postValue(current);
                 isLoading.postValue(false);
                 Log.i("iop", "onResponse: " + response + " " + message );
@@ -41,10 +43,12 @@ public class AssistantViewModel extends ViewModel {
         });
     }
     public void addMessage(ChatMessage message) {
-                List<ChatMessage> current = messages.getValue();
-                current.add(message);
-                messages.postValue(current);
-                isLoading.postValue(false);
+        List<ChatMessage> current = messages.getValue();
+        if (current != null) {
+            current.add(message);
+        }
+        messages.postValue(current);
+        isLoading.postValue(false);
     }
 
     public LiveData<List<ChatMessage>> getMessages() {
