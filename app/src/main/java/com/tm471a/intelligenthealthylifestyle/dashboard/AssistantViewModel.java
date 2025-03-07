@@ -23,10 +23,10 @@ public class AssistantViewModel extends ViewModel {
             @Override
             public void onResponse(String response) {
                 ChatMessage userMsg = new ChatMessage(message, false);
-//                ChatMessage botMsg = new ChatMessage(response, true);
+                ChatMessage botMsg = new ChatMessage(response != null ? response :"I'm sorry, I didn't understand that", true);
                 List<ChatMessage> current = messages.getValue();
                 current.add(userMsg);
-//                current.add(botMsg);
+                current.add(botMsg);
                 messages.postValue(current);
                 isLoading.postValue(false);
                 Log.i("iop", "onResponse: " + response + " " + message );

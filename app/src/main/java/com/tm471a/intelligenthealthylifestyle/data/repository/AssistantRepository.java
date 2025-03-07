@@ -38,8 +38,4 @@ public class AssistantRepository {
                     callback.onError(e.getMessage());
                 });
     }
-
-    public MutableLiveData<List<ChatMessage>> getChatHistory() {
-        return chatHistory;
-    }
 }
