@@ -71,92 +71,120 @@
                 android:inputType="numberDecimal"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Age"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp"
+            app:suffixText="years old">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <!-- Fitness Goals Group -->
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp">
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="Fitness Goals"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:orientation="vertical"
+                    android:padding="8dp">
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/cbMuscleGain"
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text="Dietary Preferences"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/cbVegetarian"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Vegetarian" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/cbVegan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Vegan" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/cbGlutenFree"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Gluten Free" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Muscle Gain" />
+                    android:orientation="vertical"
+                    android:padding="8dp">
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/cbWeightLoss"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Weight Loss" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text="Fitness Goals"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/cbEndurance"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Endurance" />
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/cbMuscleGain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Muscle Gain" />
 
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/cbWeightLoss"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Weight Loss" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/cbEndurance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Endurance" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
 
         <!-- Dietary Preferences Group -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="Dietary Preferences"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/cbVegetarian"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Vegetarian" />
-
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/cbVegan"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Vegan" />
-
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/cbGlutenFree"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Gluten Free" />
-
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
 
         <!-- Save Button -->
         <Button
