@@ -21,6 +21,7 @@ import java.util.Objects;
 public class AssistantFragment extends Fragment {
 
     private FragmentAssistantBinding binding;
+
     private AssistantViewModel viewModel;
     ChatAdapter adapter = new ChatAdapter();
 
@@ -29,7 +30,8 @@ public class AssistantFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAssistantBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this).get(AssistantViewModel.class);
+        AssistantViewModelFactory factory = new AssistantViewModelFactory(requireActivity().getApplication());
+        viewModel = new ViewModelProvider(this, factory).get(AssistantViewModel.class);
 
         setupChat();
         setupObservers();

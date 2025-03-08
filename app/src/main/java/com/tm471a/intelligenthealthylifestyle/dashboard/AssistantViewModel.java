@@ -1,7 +1,10 @@
 package com.tm471a.intelligenthealthylifestyle.dashboard;
 
+import android.app.Application;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -11,22 +14,30 @@ import com.tm471a.intelligenthealthylifestyle.data.repository.AssistantRepositor
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class AssistantViewModel extends ViewModel {
-    private final AssistantRepository repository = new AssistantRepository();
+public class AssistantViewModel extends AndroidViewModel {
+    private final AssistantRepository repository;
     private final MutableLiveData<List<ChatMessage>> messages = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
-
+    public AssistantViewModel(@NonNull Application application) {
+        super(application);
+        this.repository = new AssistantRepository(application); // Initialize with Context
+    }
     public void sendMessage(String message) {
         isLoading.postValue(true);
+
+        // Add user message immediately
+        List<ChatMessage> current = new ArrayList<>(Objects.requireNonNull(messages.getValue()));
+        current.add(new ChatMessage(message, false));
+        messages.postValue(current);
+
         repository.sendMessage(message, new AssistantRepository.ResponseCallback() {
             @Override
             public void onResponse(String response) {
-                ChatMessage userMsg = new ChatMessage(message, false);
                 ChatMessage botMsg = new ChatMessage(response != null ? response :"I'm sorry, I didn't understand that", true);
                 List<ChatMessage> current = messages.getValue();
                 if (current != null) {
-                    current.add(userMsg);
                     current.add(botMsg);
                 }
                 messages.postValue(current);
@@ -36,9 +47,12 @@ public class AssistantViewModel extends ViewModel {
 
             @Override
             public void onError(String error) {
+                // Handling error
+                List<ChatMessage> updated = new ArrayList<>(messages.getValue());
+                updated.add(new ChatMessage("Error: " + error, true));
+                messages.postValue(updated);
                 isLoading.postValue(false);
                 Log.i("iop", "onError: " + error);
-                // Handle error
             }
         });
     }
