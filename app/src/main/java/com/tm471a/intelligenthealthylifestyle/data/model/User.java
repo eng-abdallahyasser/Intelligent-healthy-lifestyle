@@ -10,6 +10,7 @@ public class User {
     private String email;
     private double height;
     private double weight;
+    private int age;
     private List<String> fitnessGoals;
     private List<String> dietaryPreferences;
 
@@ -17,7 +18,7 @@ public class User {
     public User() {} // Needed for Firestore
 
     public User(String uid, String name, String email, double height, double weight,
-                List<String> fitnessGoals, List<String> dietaryPreferences) {
+                List<String> fitnessGoals, List<String> dietaryPreferences, int age) {
         this.uid = uid;
         this.name = name;
         this.email = email;
@@ -25,12 +26,21 @@ public class User {
         this.weight = weight;
         this.fitnessGoals = fitnessGoals;
         this.dietaryPreferences = dietaryPreferences;
+        this.age = age;
     }
 
     // Getters and setters
     @NonNull
     public String getUid() {
         return uid;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public void setUid(String uid) {

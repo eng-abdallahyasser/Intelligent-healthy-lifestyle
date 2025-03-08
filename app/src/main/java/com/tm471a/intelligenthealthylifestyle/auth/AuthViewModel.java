@@ -35,9 +35,9 @@ public class AuthViewModel extends AndroidViewModel {
         });
     }
     // Add to AuthViewModel class
-    public void signUp(String name, String email, String password, double height, double weight) {
+    public void signUp(String name, String email, String password, double height, double weight,int age) {
         userLiveData.setValue(Resource.loading(null));
-        authRepository.registerUser(name, email, password, height, weight, new AuthRepository.SignupCallback() {
+        authRepository.registerUser(name, email, password,  height, weight,age, new AuthRepository.SignupCallback() {
             @Override
             public void onSuccess(User user) {
                 userLiveData.setValue(Resource.success(user));

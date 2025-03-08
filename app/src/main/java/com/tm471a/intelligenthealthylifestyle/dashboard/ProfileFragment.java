@@ -48,7 +48,8 @@ public class ProfileFragment extends Fragment {
                         Double.parseDouble(binding.etHeight.getText().toString()),
                         Double.parseDouble(binding.etWeight.getText().toString()),
                         getSelectedFitnessGoals(),
-                        getSelectedDietaryPreferences()
+                        getSelectedDietaryPreferences(),
+                        Integer.parseInt(binding.etAge.getText().toString())
                 );
 
                 viewModel.updateProfile(updatedUser);
@@ -90,6 +91,7 @@ public class ProfileFragment extends Fragment {
                 binding.etEmail.setText(user.getEmail());
                 binding.etHeight.setText(String.valueOf(user.getHeight()));
                 binding.etWeight.setText(String.valueOf(user.getWeight()));
+                binding.etAge.setText(String.valueOf(user.getAge()));
                 if (user.getFitnessGoals() != null) {
                     binding.cbEndurance.setChecked(user.getFitnessGoals().contains("Endurance"));
                     binding.cbMuscleGain.setChecked(user.getFitnessGoals().contains("Muscle Gain"));

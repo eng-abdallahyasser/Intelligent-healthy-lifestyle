@@ -54,10 +54,11 @@ public class AuthRepository {
 
     // Add method
     public void registerUser(String name, String email, String password,
-                             double height, double weight, SignupCallback callback) {
+                             double height, double weight,int age, SignupCallback callback) {
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+
                         User user = new User(
                                 auth.getCurrentUser().getUid(),
                                 name,
@@ -65,7 +66,8 @@ public class AuthRepository {
                                 height,
                                 weight,
                                 new ArrayList<>(), // fitnessGoals
-                                new ArrayList<>()  // dietaryPreferences
+                                new ArrayList<>(),  // dietaryPreferences
+                                age
                         );
 
                         db.collection("Users").document(user.getUid())

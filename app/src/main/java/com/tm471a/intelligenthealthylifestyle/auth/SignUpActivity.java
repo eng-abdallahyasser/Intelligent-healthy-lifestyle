@@ -64,11 +64,12 @@ public class SignUpActivity extends AppCompatActivity {
         String password = binding.etPassword.getText().toString().trim();
         String heightStr = binding.etHeight.getText().toString().trim();
         String weightStr = binding.etWeight.getText().toString().trim();
-
+        String ageStr = binding.etAge.getText().toString().trim();
         if (validateInputs(name, email, password, heightStr, weightStr)) {
             double height = Double.parseDouble(heightStr);
             double weight = Double.parseDouble(weightStr);
-            authViewModel.signUp(name, email, password, height, weight);
+            int age = Integer.parseInt(ageStr);
+            authViewModel.signUp(name, email, password, height, weight,age);
         }
     }
 

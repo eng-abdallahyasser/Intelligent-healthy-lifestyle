@@ -73,6 +73,17 @@
             android:inputType="numberDecimal"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Age "
+            android:inputType="numberDecimal"/>
+    </com.google.android.material.textfield.TextInputLayout>
     <!-- Sign Up Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_signup"
