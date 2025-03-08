@@ -1,10 +1,12 @@
 package com.tm471a.intelligenthealthylifestyle.dashboard;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -35,7 +37,6 @@ public class AssistantFragment extends Fragment {
 
         setupChat();
         setupObservers();
-        viewModel.sendMessage("hello");
         return binding.getRoot();
 
     }
@@ -45,6 +46,24 @@ public class AssistantFragment extends Fragment {
         binding.rvMessages.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.submitList(viewModel.getMessages().getValue());
 
+        // Input layout height observer
+        binding.inputLayout.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        int inputHeight = binding.inputLayout.getHeight();
+                        binding.rvMessages.setPadding(0, 0, 0, inputHeight);
+
+                        // Remove listener after first measurement
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            binding.inputLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        } else {
+                            binding.inputLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        }
+                    }
+                }
+        );
+        // Send button click listener
         binding.btnSend.setOnClickListener(v -> {
             String message = binding.etMessage.getText().toString();
             if (!message.isEmpty()) {
