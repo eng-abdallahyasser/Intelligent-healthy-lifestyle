@@ -7,8 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.tm471a.intelligenthealthylifestyle.data.model.ChatMessage;
 import com.tm471a.intelligenthealthylifestyle.data.repository.AssistantRepository;
 
@@ -22,7 +20,8 @@ public class AssistantViewModel extends AndroidViewModel {
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
     public AssistantViewModel(@NonNull Application application) {
         super(application);
-        this.repository = new AssistantRepository(application); // Initialize with Context
+        this.repository = new AssistantRepository();
+
     }
     public void sendMessage(String message) {
         isLoading.postValue(true);
@@ -32,10 +31,10 @@ public class AssistantViewModel extends AndroidViewModel {
         current.add(new ChatMessage(message, false));
         messages.postValue(current);
 
-        repository.sendMessage(message, new AssistantRepository.ResponseCallback() {
+        repository.sendMessage(current, new AssistantRepository.ResponseCallback() {
             @Override
             public void onResponse(String response) {
-                ChatMessage botMsg = new ChatMessage(response != null ? response :"I'm sorry, I didn't understand that", true);
+                ChatMessage botMsg = new ChatMessage(response != null ? response :"response is null", true);
                 List<ChatMessage> current = messages.getValue();
                 if (current != null) {
                     current.add(botMsg);
@@ -55,14 +54,6 @@ public class AssistantViewModel extends AndroidViewModel {
                 Log.i("iop", "onError: " + error);
             }
         });
-    }
-    public void addMessage(ChatMessage message) {
-        List<ChatMessage> current = messages.getValue();
-        if (current != null) {
-            current.add(message);
-        }
-        messages.postValue(current);
-        isLoading.postValue(false);
     }
 
     public LiveData<List<ChatMessage>> getMessages() {

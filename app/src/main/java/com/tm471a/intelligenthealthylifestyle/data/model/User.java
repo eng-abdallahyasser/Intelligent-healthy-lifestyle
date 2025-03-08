@@ -14,8 +14,30 @@ public class User {
     private List<String> fitnessGoals;
     private List<String> dietaryPreferences;
 
-    // Add constructor
-    public User() {} // Needed for Firestore
+    @Override
+    public String toString() {
+        return "User{" +
+                "uid='" + uid + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", height=" + height +
+                ", weight=" + weight +
+                ", age=" + age +
+                ", fitnessGoals=" + fitnessGoals +
+                ", dietaryPreferences=" + dietaryPreferences +
+                '}';
+    }
+
+    public User() {
+        this.uid = "uid";
+        this.name = "name";
+        this.email = "email";
+        this.height = 100;
+        this.weight = 100;
+        this.fitnessGoals = List.of("fitnessGoals");
+        this.dietaryPreferences = List.of("dietaryPreferences");
+        this.age = 20;
+    }
 
     public User(String uid, String name, String email, double height, double weight,
                 List<String> fitnessGoals, List<String> dietaryPreferences, int age) {

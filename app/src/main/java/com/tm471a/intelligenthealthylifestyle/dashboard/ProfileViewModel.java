@@ -10,37 +10,33 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.tm471a.intelligenthealthylifestyle.data.model.User;
 
+import java.util.Objects;
+
 public class ProfileViewModel extends ViewModel {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private MutableLiveData<User> userData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> updateStatus = new MutableLiveData<>();
+    private final MutableLiveData<User> userData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> updateStatus = new MutableLiveData<>();
 
     public ProfileViewModel() {
         loadUserData();
     }
 
     private void loadUserData() {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        if (uid != null) {
-            db.collection("Users").document(uid).get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            User user = documentSnapshot.toObject(User.class);
-                            userData.postValue(user);
-                        } else {
-                            // User document does not exist
-                            userData.postValue(null); // Or handle this case appropriately
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        // Handle failure
+        String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        db.collection("Users").document(uid).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        User user = documentSnapshot.toObject(User.class);
+                        userData.postValue(user);
+                    } else {
+                        // User document does not exist
                         userData.postValue(null); // Or handle this case appropriately
-                    });
-            Log.i("dddd", "loadUserData: ssssssssssssssssssssssssssssssssssssssss");
-        }else{
-            userData.postValue(null);
-            Log.i("dddd", "loadUserData: faild");
-        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure
+                    userData.postValue(null); // Or handle this case appropriately
+                });
     }
 
     public void updateProfile(User user) {

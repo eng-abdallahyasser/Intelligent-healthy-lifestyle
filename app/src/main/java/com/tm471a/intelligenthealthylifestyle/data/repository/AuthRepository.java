@@ -1,19 +1,19 @@
 package com.tm471a.intelligenthealthylifestyle.data.repository;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+
 
 import com.google.firebase.auth.*;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.tm471a.intelligenthealthylifestyle.data.model.User;
-import com.tm471a.intelligenthealthylifestyle.utils.Resource;
+
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class AuthRepository {
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public interface LoginCallback {
         void onSuccess(User user);
@@ -24,7 +24,7 @@ public class AuthRepository {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        fetchUserData(auth.getCurrentUser().getUid(), callback);
+                        fetchUserData(Objects.requireNonNull(auth.getCurrentUser()).getUid(), callback);
                     } else {
                         callback.onError(task.getException() != null ?
                                 task.getException().getMessage() :

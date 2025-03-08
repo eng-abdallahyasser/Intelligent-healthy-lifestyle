@@ -35,18 +35,12 @@ public class AssistantFragment extends Fragment {
 
         setupChat();
         setupObservers();
-
+        viewModel.sendMessage("hello");
         return binding.getRoot();
+
     }
 
     private void setupChat() {
-        // Initialize
-        if(viewModel.getMessages().getValue().isEmpty()) {
-            viewModel.addMessage(new ChatMessage("Hello!", false));
-            viewModel.addMessage(new ChatMessage("Hi there!", true));
-            viewModel.addMessage(new ChatMessage("How can I help you today?", true));
-        }
-
         binding.rvMessages.setAdapter(adapter);
         binding.rvMessages.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.submitList(viewModel.getMessages().getValue());

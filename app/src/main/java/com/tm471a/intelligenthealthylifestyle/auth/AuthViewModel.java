@@ -12,8 +12,8 @@ import com.tm471a.intelligenthealthylifestyle.utils.Resource;
 
 // AuthViewModel.java
 public class AuthViewModel extends AndroidViewModel {
-    private AuthRepository authRepository;
-    private MutableLiveData<Resource<User>> userLiveData = new MutableLiveData<>();
+    private final AuthRepository authRepository;
+    private final MutableLiveData<Resource<User>> userLiveData = new MutableLiveData<>();
 
     public AuthViewModel(Application application) {
         super(application);
