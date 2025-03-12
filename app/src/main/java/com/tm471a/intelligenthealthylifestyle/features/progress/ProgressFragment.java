@@ -1,4 +1,4 @@
-package com.tm471a.intelligenthealthylifestyle.dashboard;
+package com.tm471a.intelligenthealthylifestyle.features.progress;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

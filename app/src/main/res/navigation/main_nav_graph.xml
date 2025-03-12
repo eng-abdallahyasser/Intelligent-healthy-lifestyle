@@ -7,31 +7,31 @@
 
     <fragment
         android:id="@+id/nav_workout"
-        android:name="com.tm471a.intelligenthealthylifestyle.dashboard.WorkoutFragment"
+        android:name="com.tm471a.intelligenthealthylifestyle.features.workout.WorkoutFragment"
         android:label="Workout Plan"
         tools:layout="@layout/fragment_workout" />
 
     <fragment
         android:id="@+id/nav_nutrition"
-        android:name="com.tm471a.intelligenthealthylifestyle.dashboard.NutritionFragment"
+        android:name="com.tm471a.intelligenthealthylifestyle.features.nutrition.NutritionFragment"
         android:label="Nutrition"
         tools:layout="@layout/fragment_nutrition" />
 
     <fragment
         android:id="@+id/nav_progress"
-        android:name="com.tm471a.intelligenthealthylifestyle.dashboard.ProgressFragment"
+        android:name="com.tm471a.intelligenthealthylifestyle.features.progress.ProgressFragment"
         android:label="Progress"
         tools:layout="@layout/fragment_progress" />
 
     <fragment
         android:id="@+id/nav_assistant"
-        android:name="com.tm471a.intelligenthealthylifestyle.dashboard.AssistantFragment"
+        android:name="com.tm471a.intelligenthealthylifestyle.features.assistant.AssistantFragment"
         android:label="AI Assistant"
         tools:layout="@layout/fragment_assistant" />
 
     <fragment
         android:id="@+id/nav_profile"
-        android:name="com.tm471a.intelligenthealthylifestyle.dashboard.ProfileFragment"
+        android:name="com.tm471a.intelligenthealthylifestyle.features.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 

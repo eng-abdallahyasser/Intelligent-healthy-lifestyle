@@ -9,9 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.tm471a.intelligenthealthylifestyle.LauncherActivity;
 import com.tm471a.intelligenthealthylifestyle.R;
-import com.tm471a.intelligenthealthylifestyle.dashboard.MainActivity;
+import com.tm471a.intelligenthealthylifestyle.features.MainActivity;
 import com.tm471a.intelligenthealthylifestyle.databinding.ActivityLoginBinding;
 
 // LoginActivity.java

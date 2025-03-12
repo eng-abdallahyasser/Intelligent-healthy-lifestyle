@@ -31,7 +31,7 @@
             android:parentActivityName=".auth.LoginActivity" />
 
         <activity
-            android:name=".dashboard.MainActivity"
+            android:name=".features.MainActivity"
             android:parentActivityName=".LauncherActivity" />
     </application>
 

@@ -1,4 +1,4 @@
-package com.tm471a.intelligenthealthylifestyle.dashboard;
+package com.tm471a.intelligenthealthylifestyle.features.assistant;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
@@ -13,11 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.tm471a.intelligenthealthylifestyle.data.model.ChatMessage;
 import com.tm471a.intelligenthealthylifestyle.databinding.FragmentAssistantBinding;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Objects;
 
 public class AssistantFragment extends Fragment {

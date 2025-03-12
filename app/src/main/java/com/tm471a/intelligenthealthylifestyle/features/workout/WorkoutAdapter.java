@@ -1,4 +1,4 @@
-package com.tm471a.intelligenthealthylifestyle.dashboard;
+package com.tm471a.intelligenthealthylifestyle.features.workout;
 
 import android.view.LayoutInflater;
 import android.view.View;

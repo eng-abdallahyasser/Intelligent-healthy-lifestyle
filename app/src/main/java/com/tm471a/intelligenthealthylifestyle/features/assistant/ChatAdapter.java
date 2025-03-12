@@ -1,4 +1,4 @@
-package com.tm471a.intelligenthealthylifestyle.dashboard;
+package com.tm471a.intelligenthealthylifestyle.features.assistant;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;

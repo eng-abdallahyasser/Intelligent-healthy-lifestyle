@@ -1,6 +1,4 @@
-package com.tm471a.intelligenthealthylifestyle.dashboard;
-
-import android.util.Log;
+package com.tm471a.intelligenthealthylifestyle.features.profile;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

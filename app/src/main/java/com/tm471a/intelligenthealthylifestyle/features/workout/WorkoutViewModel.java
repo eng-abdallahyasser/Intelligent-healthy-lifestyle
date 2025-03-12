@@ -1,4 +1,4 @@
-package com.tm471a.intelligenthealthylifestyle.dashboard;
+package com.tm471a.intelligenthealthylifestyle.features.workout;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;

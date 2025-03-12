@@ -3,16 +3,12 @@ package com.tm471a.intelligenthealthylifestyle;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.tm471a.intelligenthealthylifestyle.auth.LoginActivity;
-import com.tm471a.intelligenthealthylifestyle.dashboard.MainActivity;
+import com.tm471a.intelligenthealthylifestyle.features.MainActivity;
 
 public class LauncherActivity extends AppCompatActivity {
 
