@@ -1,9 +1,11 @@
 package com.tm471a.intelligenthealthylifestyle.features.profile;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,19 +23,28 @@ public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
     private ProfileViewModel viewModel;
+    private String selectedFitnessLevel = "Beginner";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        String[] fitnessLevels = new String[]{"Beginner", "Intermediate", "Advanced"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, fitnessLevels);
+        binding.etCurrentFitnessLevel.setAdapter(adapter);
 
+        binding.etCurrentFitnessLevel.setOnItemClickListener((parent, view, position, id) -> {
+            selectedFitnessLevel = fitnessLevels[position];
+
+        });
         setupForm();
         setupObservers();
 
         return binding.getRoot();
     }
 
+    @SuppressLint("SetTextI18n")
     private void setupForm() {
         binding.btnSave.setOnClickListener(v -> {
             // Get current user ID
@@ -49,7 +60,10 @@ public class ProfileFragment extends Fragment {
                         Double.parseDouble(binding.etWeight.getText().toString()),
                         getSelectedFitnessGoals(),
                         getSelectedDietaryPreferences(),
-                        Integer.parseInt(binding.etAge.getText().toString())
+                        Integer.parseInt(binding.etAge.getText().toString()),
+                        binding.btnGender.getText().equals("Male"),
+                        selectedFitnessLevel,
+                        binding.etMedicalConditionsOrInjuries.getText().toString().trim()
                 );
 
                 viewModel.updateProfile(updatedUser);
@@ -58,6 +72,13 @@ public class ProfileFragment extends Fragment {
                 showMsg("Please enter valid numerical values for height and weight");
             } catch (Exception e) {
                 showMsg("Please fill all required fields");
+            }
+        });
+        binding.btnGender.setOnClickListener(view->{
+            if(binding.btnGender.getText().equals("Male")){
+                binding.btnGender.setText("Female");
+            }else{
+                binding.btnGender.setText("Male");
             }
         });
     }
@@ -84,7 +105,10 @@ public class ProfileFragment extends Fragment {
         Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG).show();
     }
 
+    @SuppressLint("SetTextI18n")
     private void setupObservers() {
+        String[] fitnessLevels = new String[]{"Beginner", "Intermediate", "Advanced"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, fitnessLevels);
         viewModel.getUserData().observe(getViewLifecycleOwner(), user -> {
             if (user != null && getContext() != null) {
                 binding.etName.setText(user.getName());
@@ -92,6 +116,14 @@ public class ProfileFragment extends Fragment {
                 binding.etHeight.setText(String.valueOf(user.getHeight()));
                 binding.etWeight.setText(String.valueOf(user.getWeight()));
                 binding.etAge.setText(String.valueOf(user.getAge()));
+                binding.etMedicalConditionsOrInjuries.setText(user.getMedicalConditionsOrInjuries());
+                binding.etCurrentFitnessLevel.setText(user.getCurrentFitnessLevel());
+                binding.etCurrentFitnessLevel.setAdapter(adapter);
+                if(user.getGenderIsMale()){
+                    binding.btnGender.setText("Male");
+                }else {
+                    binding.btnGender.setText("Female");
+                }
                 if (user.getFitnessGoals() != null) {
                     binding.cbEndurance.setChecked(user.getFitnessGoals().contains("Endurance"));
                     binding.cbMuscleGain.setChecked(user.getFitnessGoals().contains("Muscle Gain"));

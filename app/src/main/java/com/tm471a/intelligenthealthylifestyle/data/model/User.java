@@ -8,6 +8,9 @@ public class User {
     private String uid;
     private String name;
     private String email;
+    private Boolean genderIsMale;
+    private String  currentFitnessLevel;
+    private String medicalConditionsOrInjuries;
     private double height;
     private double weight;
     private int age;
@@ -25,6 +28,9 @@ public class User {
                 ", age=" + age +
                 ", fitnessGoals=" + fitnessGoals +
                 ", dietaryPreferences=" + dietaryPreferences +
+                ", genderIsMale=" + genderIsMale +
+                ", currentFitnessLevel='" + currentFitnessLevel + '\'' +
+                ", medicalConditionsOrInjuries='" + medicalConditionsOrInjuries + '\'' +
                 '}';
     }
 
@@ -34,13 +40,16 @@ public class User {
         this.email = "email";
         this.height = 100;
         this.weight = 100;
+        this.currentFitnessLevel = "currentFitnessLevel";
+        this.medicalConditionsOrInjuries = "medicalConditionsOrInjuries";
+        this.genderIsMale = true;
         this.fitnessGoals = List.of("fitnessGoals");
         this.dietaryPreferences = List.of("dietaryPreferences");
         this.age = 20;
     }
 
     public User(String uid, String name, String email, double height, double weight,
-                List<String> fitnessGoals, List<String> dietaryPreferences, int age) {
+                List<String> fitnessGoals, List<String> dietaryPreferences, int age, Boolean genderIsMale, String currentFitnessLevel, String medicalConditionsOrInjuries) {
         this.uid = uid;
         this.name = name;
         this.email = email;
@@ -49,12 +58,39 @@ public class User {
         this.fitnessGoals = fitnessGoals;
         this.dietaryPreferences = dietaryPreferences;
         this.age = age;
+        this.genderIsMale = genderIsMale;
+        this.currentFitnessLevel = currentFitnessLevel;
+        this.medicalConditionsOrInjuries = medicalConditionsOrInjuries;
     }
 
     // Getters and setters
     @NonNull
     public String getUid() {
         return uid;
+    }
+
+    public Boolean getGenderIsMale() {
+        return genderIsMale;
+    }
+
+    public void setGenderIsMale(Boolean genderIsMale) {
+        this.genderIsMale = genderIsMale;
+    }
+
+    public String getCurrentFitnessLevel() {
+        return currentFitnessLevel;
+    }
+
+    public void setCurrentFitnessLevel(String currentFitnessLevel) {
+        this.currentFitnessLevel = currentFitnessLevel;
+    }
+
+    public String getMedicalConditionsOrInjuries() {
+        return medicalConditionsOrInjuries;
+    }
+
+    public void setMedicalConditionsOrInjuries(String medicalConditionsOrInjuries) {
+        this.medicalConditionsOrInjuries = medicalConditionsOrInjuries;
     }
 
     public int getAge() {

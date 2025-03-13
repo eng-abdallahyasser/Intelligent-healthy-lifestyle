@@ -10,6 +10,8 @@ import com.tm471a.intelligenthealthylifestyle.data.model.User;
 import com.tm471a.intelligenthealthylifestyle.data.repository.AuthRepository;
 import com.tm471a.intelligenthealthylifestyle.utils.Resource;
 
+import java.util.List;
+
 // AuthViewModel.java
 public class AuthViewModel extends AndroidViewModel {
     private final AuthRepository authRepository;
@@ -35,9 +37,12 @@ public class AuthViewModel extends AndroidViewModel {
         });
     }
     // Add to AuthViewModel class
-    public void signUp(String name, String email, String password, double height, double weight,int age) {
+    public void signUp(String name, String email, String password, double height, double weight,int age, String gender, String medicalConditionsOrInjuries, String currentFitnessLevel,
+                       List<String> fitnessGoals, List<String> dietaryPreferences) {
         userLiveData.setValue(Resource.loading(null));
-        authRepository.registerUser(name, email, password,  height, weight,age, new AuthRepository.SignupCallback() {
+        authRepository.registerUser(name, email, password,  height, weight,age,
+                gender, medicalConditionsOrInjuries, currentFitnessLevel, fitnessGoals, dietaryPreferences,
+                new AuthRepository.SignupCallback() {
             @Override
             public void onSuccess(User user) {
                 userLiveData.setValue(Resource.success(user));

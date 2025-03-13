@@ -53,13 +53,13 @@ public class AssistantViewModel extends AndroidViewModel {
                 });
     }
     public void sendMessage(String message) {
-        isLoading.postValue(true);
 
         // Add user message immediately
         List<ChatMessage> current = new ArrayList<>(Objects.requireNonNull(messages.getValue()));
         current.add(new ChatMessage(message, false));
         messages.postValue(current);
 
+        isLoading.postValue(true);
         repository.sendMessage(current,
                 new AssistantRepository.ResponseCallback() {
                     @Override

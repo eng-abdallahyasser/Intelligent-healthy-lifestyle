@@ -8,6 +8,7 @@ import com.tm471a.intelligenthealthylifestyle.data.model.User;
 
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -54,7 +55,9 @@ public class AuthRepository {
 
     // Add method
     public void registerUser(String name, String email, String password,
-                             double height, double weight,int age, SignupCallback callback) {
+                             double height, double weight, int age,
+                             String gender, String medicalConditionsOrInjuries, String currentFitnessLevel,
+                             List<String> fitnessGoals, List<String> dietaryPreferences, SignupCallback callback) {
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -65,9 +68,12 @@ public class AuthRepository {
                                 email,
                                 height,
                                 weight,
-                                new ArrayList<>(), // fitnessGoals
-                                new ArrayList<>(),  // dietaryPreferences
-                                age
+                                fitnessGoals,
+                                dietaryPreferences,
+                                age,
+                                gender=="Male",
+                                currentFitnessLevel,
+                                medicalConditionsOrInjuries
                         );
 
                         db.collection("Users").document(user.getUid())
