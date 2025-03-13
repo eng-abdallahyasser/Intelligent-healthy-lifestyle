@@ -1,8 +1,8 @@
 package com.tm471a.intelligenthealthylifestyle.features.assistant;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,11 +52,7 @@ public class AssistantFragment extends Fragment {
                         binding.rvMessages.setPadding(0, 0, 0, inputHeight);
 
                         // Remove listener after first measurement
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            binding.inputLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        } else {
-                            binding.inputLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                        }
+                        binding.inputLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     }
                 }
         );
@@ -82,12 +78,14 @@ public class AssistantFragment extends Fragment {
             if (isLoading != null) {
                 if (isLoading) {
                     // Show loading indicator
-                    binding.progressBar.setVisibility(View.VISIBLE);
+                    adapter.showLoading();
                     binding.btnSend.setEnabled(false);
+                    Log.i("debugging", "loading ....");
                 } else {
                     // Hide loading indicator
-                    binding.progressBar.setVisibility(View.GONE);
+                    adapter.hideLoading();
                     binding.btnSend.setEnabled(true);
+                    Log.i("debugging", "loading finished ....");
                 }
             }
         });

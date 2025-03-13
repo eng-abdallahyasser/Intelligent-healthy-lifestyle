@@ -20,7 +20,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_BOT = 1;
     private static final int TYPE_LOADING = 2;
 
-    private List<ChatMessage> messages = new ArrayList<>();
+    final private List<ChatMessage> messages = new ArrayList<>();
     private boolean isLoadingAdded = false;
 
     @NonNull
@@ -55,7 +55,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        if (position == messages.size() - 1 && isLoadingAdded) {
+        if (isLoadingAdded && position == messages.size() - 1) {
             return TYPE_LOADING;
         }
         return messages.get(position).isBot() ? TYPE_BOT : TYPE_USER;
@@ -125,27 +125,26 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public void addMessage(ChatMessage message) {
-        messages.add(message);
-        notifyItemInserted(messages.size() - 1);
-    }
-
+    @SuppressLint("NotifyDataSetChanged")
     public void showLoading() {
         isLoadingAdded = true;
-        ChatMessage loadingMessage = new ChatMessage("", true);
-        loadingMessage.setLoading(true);
-        messages.add(loadingMessage);
-        notifyItemInserted(messages.size() - 1);
+        // Create empty bot message to maintain list consistency
+        messages.add(new ChatMessage("", true));
+        notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void hideLoading() {
         if (isLoadingAdded) {
             isLoadingAdded = false;
-            int position = messages.size() - 1;
-            if (position >= 0) {
-                messages.remove(position);
-                notifyItemRemoved(position);
+            for(int i = 0; i < messages.size();){
+                if(messages.get(i).getContent().isEmpty()){
+                    messages.remove(i);
+                }else{
+                    i++;
+                }
             }
+            notifyDataSetChanged();
         }
     }
 }

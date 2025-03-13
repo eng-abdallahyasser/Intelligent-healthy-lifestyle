@@ -33,8 +33,6 @@ public class WorkoutFragment extends Fragment {
             if (plans != null && !plans.isEmpty()) {
                 WorkoutAdapter adapter = new WorkoutAdapter(plans);
                 binding.rvWorkouts.setAdapter(adapter);
-            } else {
-                // Show empty state
             }
         });
     }
