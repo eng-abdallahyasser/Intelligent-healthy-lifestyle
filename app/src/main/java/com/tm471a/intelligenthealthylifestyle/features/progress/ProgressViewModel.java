@@ -25,4 +25,15 @@ public class ProgressViewModel extends ViewModel {
     public LiveData<List<Float>> getWorkoutEntries() {
         return workoutEntries;
     }
+    public void saveWeight(float weight) {
+        repository.saveWeight(weight);
+    }
+
+    public void saveWorkout(int count) {
+        repository.saveWorkout(count);
+    }
+
+    public void saveBodyMeasurement(float chest, float waist, float hips) {
+        repository.saveBodyMeasurement(chest, waist, hips);
+    }
 }
