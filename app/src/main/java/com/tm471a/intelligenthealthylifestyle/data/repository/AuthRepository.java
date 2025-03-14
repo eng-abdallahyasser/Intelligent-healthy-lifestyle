@@ -7,7 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.tm471a.intelligenthealthylifestyle.data.model.User;
 
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -63,7 +63,7 @@ public class AuthRepository {
                     if (task.isSuccessful()) {
 
                         User user = new User(
-                                auth.getCurrentUser().getUid(),
+                                Objects.requireNonNull(auth.getCurrentUser()).getUid(),
                                 name,
                                 email,
                                 height,
@@ -71,7 +71,7 @@ public class AuthRepository {
                                 fitnessGoals,
                                 dietaryPreferences,
                                 age,
-                                gender=="Male",
+                                Objects.equals(gender, "Male"),
                                 currentFitnessLevel,
                                 medicalConditionsOrInjuries
                         );

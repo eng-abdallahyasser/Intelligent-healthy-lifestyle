@@ -1,16 +1,13 @@
 package com.tm471a.intelligenthealthylifestyle.auth;
 
-import static java.security.AccessController.getContext;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.google.android.material.snackbar.Snackbar;
 import com.tm471a.intelligenthealthylifestyle.R;
 import com.tm471a.intelligenthealthylifestyle.features.MainActivity;
@@ -18,6 +15,7 @@ import com.tm471a.intelligenthealthylifestyle.databinding.ActivitySignupBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -65,6 +63,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void setupClickListeners() {
         binding.btnSignup.setOnClickListener(v -> attemptSignUp());
         binding.tvLogin.setOnClickListener(v -> navigateToLogin());
@@ -75,20 +74,18 @@ public class SignUpActivity extends AppCompatActivity {
                 binding.btnGender.setText("Male");
             }
         });
-        binding.etCurrentFitnessLevel.setOnItemClickListener((parent, view, position, id) -> {
-            selectedFitnessLevel = fitnessLevels[position];
-        });
+        binding.etCurrentFitnessLevel.setOnItemClickListener((parent, view, position, id) -> selectedFitnessLevel = fitnessLevels[position]);
     }
 
     private void attemptSignUp() {
-        String name = binding.etName.getText().toString().trim();
-        String email = binding.etEmail.getText().toString().trim();
-        String password = binding.etPassword.getText().toString().trim();
-        String heightStr = binding.etHeight.getText().toString().trim();
-        String weightStr = binding.etWeight.getText().toString().trim();
-        String ageStr = binding.etAge.getText().toString().trim();
+        String name = Objects.requireNonNull(binding.etName.getText()).toString().trim();
+        String email = Objects.requireNonNull(binding.etEmail.getText()).toString().trim();
+        String password = Objects.requireNonNull(binding.etPassword.getText()).toString().trim();
+        String heightStr = Objects.requireNonNull(binding.etHeight.getText()).toString().trim();
+        String weightStr = Objects.requireNonNull(binding.etWeight.getText()).toString().trim();
+        String ageStr = Objects.requireNonNull(binding.etAge.getText()).toString().trim();
         String gender = binding.btnGender.getText().toString().trim();
-        String medicalConditionsOrInjuries = binding.etMedicalConditionsOrInjuries.getText().toString().trim();
+        String medicalConditionsOrInjuries = Objects.requireNonNull(binding.etMedicalConditionsOrInjuries.getText()).toString().trim();
 
         if (validateInputs(name, email, password, heightStr, weightStr)) {
             double height = Double.parseDouble(heightStr);
