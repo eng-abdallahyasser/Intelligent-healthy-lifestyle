@@ -39,7 +39,7 @@ public class WorkoutFragment extends Fragment {
 
     private void setupClickListeners() {
         binding.fabLogWorkout.setOnClickListener(v -> {
-            // Navigate to workout logging
+            viewModel.generateWorkoutPlan();
         });
     }
 

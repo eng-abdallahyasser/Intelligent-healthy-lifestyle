@@ -1,13 +1,21 @@
 package com.tm471a.intelligenthealthylifestyle.data.model;
 
 import com.google.firebase.firestore.PropertyName;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class WorkoutPlan {
+    @SerializedName("plan_name")
     private String planName;
+
+    @SerializedName("duration")
     private String duration;
+
+    @SerializedName("exercises")
     private List<Exercise> exercises;
+
+    @SerializedName("difficulty")
     private String difficulty;
 
     // Firestore requires empty constructor

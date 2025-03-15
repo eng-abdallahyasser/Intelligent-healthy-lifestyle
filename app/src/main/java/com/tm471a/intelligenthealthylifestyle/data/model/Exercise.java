@@ -1,14 +1,27 @@
 package com.tm471a.intelligenthealthylifestyle.data.model;
 
 import com.google.firebase.firestore.PropertyName;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Exercise {
+    @SerializedName("name")
     private String name;
+
+    @SerializedName("description")
     private String description;
+
+    @SerializedName("primary_muscles")
     private List<String> primaryMuscles;
+
+    @SerializedName("equipment")
     private List<String> equipment;
+
+    @SerializedName("sets")
     private int sets;
+
+    @SerializedName("reps")
     private int reps;
 
     public Exercise() {}
