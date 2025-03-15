@@ -1,107 +1,167 @@
 package com.tm471a.intelligenthealthylifestyle.data.repository;
 
 import android.util.Log;
-
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.*;
+import com.tm471a.intelligenthealthylifestyle.data.model.MeasurementLog;
+import com.tm471a.intelligenthealthylifestyle.data.model.WeightLog;
+import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutLog;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 public class ProgressRepository {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final MutableLiveData<List<Float>> weightData = new MutableLiveData<>();
-    private final MutableLiveData<List<Integer>> workoutData = new MutableLiveData<>();
+    private final MutableLiveData<List<WeightLog>> weightLogs = new MutableLiveData<>();
+    private final MutableLiveData<List<WorkoutLog>> workoutLogs = new MutableLiveData<>();
+    private final MutableLiveData<List<MeasurementLog>> measurementLogs = new MutableLiveData<>();
+    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
-    public void loadWeightProgress() {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    public ProgressRepository() {
+        setupFirestoreListeners();
+    }
 
+    private void setupFirestoreListeners() {
+        String userId = getCurrentUserId();
+        if (userId == null) return;
+
+        setupWeightLogsListener(userId);
+        setupWorkoutLogsListener(userId);
+        setupMeasurementLogsListener(userId);
+    }
+
+    private void setupWeightLogsListener(String userId) {
         db.collection("Users").document(userId)
                 .collection("weight_logs")
                 .orderBy("date", Query.Direction.ASCENDING)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<Float> weights = new ArrayList<>();
-                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
-                        Float weight = doc.getDouble("weight").floatValue();
-                        weights.add(weight);
-                    }
-                    weightData.postValue(weights);
-                });
+                .addSnapshotListener((value, error) -> handleSnapshot(
+                        value, error,
+                        "Weight logs",
+                        snapshot -> snapshot.toObject(WeightLog.class),
+                        weightLogs
+                ));
     }
 
-    public void loadWorkoutFrequency() {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
+    private void setupWorkoutLogsListener(String userId) {
         db.collection("Users").document(userId)
                 .collection("workout_logs")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<Integer> workouts = new ArrayList<>();
-                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
-                        Integer count = doc.getLong("count").intValue();
-                        workouts.add(count);
-                    }
-                    workoutData.postValue(workouts);
-                });
+                .orderBy("date", Query.Direction.ASCENDING)
+                .addSnapshotListener((value, error) -> handleSnapshot(
+                        value, error,
+                        "Workout logs",
+                        snapshot -> snapshot.toObject(WorkoutLog.class),
+                        workoutLogs
+                ));
     }
 
-    public MutableLiveData<List<Float>> getWeightData() {
-        return weightData;
-    }
-
-    public MutableLiveData<List<Integer>> getWorkoutData() {
-        return workoutData;
-    }
-    public void saveWeight(float weight) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Map<String, Object> data = new HashMap<>();
-        data.put("weight", weight);
-        data.put("date", FieldValue.serverTimestamp());
-
+    private void setupMeasurementLogsListener(String userId) {
         db.collection("Users").document(userId)
+                .collection("measurement_logs")
+                .orderBy("date", Query.Direction.ASCENDING)
+                .addSnapshotListener((value, error) -> handleSnapshot(
+                        value, error,
+                        "Measurement logs",
+                        snapshot -> snapshot.toObject(MeasurementLog.class),
+                        measurementLogs
+                ));
+    }
+
+    private <T> void handleSnapshot(QuerySnapshot snapshot,
+                                    Exception error,
+                                    String logType,
+                                    DocumentMapper<T> mapper,
+                                    MutableLiveData<List<T>> liveData) {
+        if (error != null) {
+            logError("Error loading " + logType + ": " + error.getMessage());
+            return;
+        }
+
+        if (snapshot == null) {
+            logError(logType + " snapshot is null");
+            return;
+        }
+
+        List<T> items = new ArrayList<>();
+        for (DocumentSnapshot doc : snapshot.getDocuments()) {
+            T item = mapper.map(doc);
+            if (item != null) {
+                items.add(item);
+            }
+        }
+        liveData.postValue(items);
+    }
+
+    public void logWeight(WeightLog weightLog) {
+        db.collection("Users").document(Objects.requireNonNull(getCurrentUserId()))
                 .collection("weight_logs")
-                .add(data)
+                .add(weightLog.toMap())
                 .addOnSuccessListener(documentReference ->
                         Log.d("ProgressRepo", "Weight logged successfully"))
                 .addOnFailureListener(e ->
                         Log.w("ProgressRepo", "Error logging weight", e));
     }
 
-    public void saveWorkout(int count) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Map<String, Object> data = new HashMap<>();
-        data.put("count", count);
-        data.put("date", FieldValue.serverTimestamp());
-
-        db.collection("Users").document(userId)
-                .collection("workout_logs")
-                .add(data)
+    public void logWorkout(WorkoutLog workoutLog) {
+        db.collection("Users").document(Objects.requireNonNull(getCurrentUserId()))
+                .collection("weight_logs")
+                .add(workoutLog.toMap())
                 .addOnSuccessListener(documentReference ->
-                        Log.d("ProgressRepo", "Workout logged successfully"))
+                        Log.d("ProgressRepo", "Weight logged successfully"))
                 .addOnFailureListener(e ->
-                        Log.w("ProgressRepo", "Error logging workout", e));
+                        Log.w("ProgressRepo", "Error logging weight", e));
     }
 
-    public void saveBodyMeasurement(float chest, float waist, float hips) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Map<String, Object> data = new HashMap<>();
-        data.put("chest", chest);
-        data.put("waist", waist);
-        data.put("hips", hips);
-        data.put("date", FieldValue.serverTimestamp());
-
-        db.collection("Users").document(userId)
-                .collection("measurement_logs")
-                .add(data)
+    public void logMeasurement(MeasurementLog measurementLog) {
+        db.collection("Users").document(Objects.requireNonNull(getCurrentUserId()))
+                .collection("weight_logs")
+                .add(measurementLog.toMap())
                 .addOnSuccessListener(documentReference ->
-                        Log.d("ProgressRepo", "Measurements logged successfully"))
+                        Log.d("ProgressRepo", "Weight logged successfully"))
                 .addOnFailureListener(e ->
-                        Log.w("ProgressRepo", "Error logging measurements", e));
+                        Log.w("ProgressRepo", "Error logging weight", e));
+    }
+
+    private void executeFirestoreOperation(String collectionPath,
+                                           Object data,
+                                           String successMessage,
+                                           String errorMessage) {
+        String userId = getCurrentUserId();
+        if (userId == null) return;
+
+        db.document(collectionPath)
+                .set(data)
+                .addOnSuccessListener(documentReference ->
+                        Log.d("Firestore", successMessage))
+                .addOnFailureListener(e ->
+                        logError(errorMessage + ": " + e.getMessage()));
+    }
+
+    // LiveData Getters
+    public LiveData<List<WeightLog>> getWeightLogs() { return weightLogs; }
+    public LiveData<List<WorkoutLog>> getWorkoutLogs() { return workoutLogs; }
+    public LiveData<List<MeasurementLog>> getMeasurementLogs() { return measurementLogs; }
+    public LiveData<String> getErrorMessage() { return errorMessage; }
+
+    private String getCurrentUserId() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            logError("User not authenticated");
+            return null;
+        }
+        return user.getUid();
+    }
+
+    private void logError(String message) {
+        Log.e("ProgressRepo", message);
+        errorMessage.postValue(message);
+    }
+
+    private interface DocumentMapper<T> {
+        T map(DocumentSnapshot snapshot);
     }
 }

@@ -1,39 +1,31 @@
 package com.tm471a.intelligenthealthylifestyle.features.progress;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.tm471a.intelligenthealthylifestyle.data.model.MeasurementLog;
+import com.tm471a.intelligenthealthylifestyle.data.model.WeightLog;
+import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutLog;
 import com.tm471a.intelligenthealthylifestyle.data.repository.ProgressRepository;
 import java.util.List;
 
 public class ProgressViewModel extends ViewModel {
-    private final ProgressRepository repository = new ProgressRepository();
-    private final MutableLiveData<List<Float>> weightEntries = new MutableLiveData<>();
-    private final MutableLiveData<List<Float>> workoutEntries = new MutableLiveData<>();
-
-    public void loadProgressData() {
-
-    }
+    private final ProgressRepository repo = new ProgressRepository();
 
 
 
-    public LiveData<List<Float>> getWeightEntries() {
-        return weightEntries;
-    }
 
-    public LiveData<List<Float>> getWorkoutEntries() {
-        return workoutEntries;
-    }
-    public void saveWeight(float weight) {
-        repository.saveWeight(weight);
-    }
-
-    public void saveWorkout(int count) {
-        repository.saveWorkout(count);
-    }
-
+    // Save methods
+    public void saveWeight(float weight) { repo.logWeight(new WeightLog(weight)); }
+    public void saveWorkout(int count) { repo.logWorkout(new WorkoutLog(count)); }
     public void saveBodyMeasurement(float chest, float waist, float hips) {
-        repository.saveBodyMeasurement(chest, waist, hips);
+        repo.logMeasurement(new MeasurementLog(chest, waist, hips));
+    }
+
+    public LiveData<List<WeightLog>> getWeightLogs() {
+        return repo.getWeightLogs();
+    }
+    public LiveData<List<WorkoutLog>> getWorkoutLogs() {
+        return repo.getWorkoutLogs();
     }
 }
