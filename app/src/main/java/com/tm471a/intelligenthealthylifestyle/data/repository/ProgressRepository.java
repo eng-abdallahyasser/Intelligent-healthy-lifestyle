@@ -12,7 +12,9 @@ import com.tm471a.intelligenthealthylifestyle.data.model.WeightLog;
 import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutLog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class ProgressRepository {
@@ -104,6 +106,12 @@ public class ProgressRepository {
                         Log.d("ProgressRepo", "Weight logged successfully"))
                 .addOnFailureListener(e ->
                         Log.w("ProgressRepo", "Error logging weight", e));
+        // Assuming weightLog.getWeight() returns a valid weight value
+        Map<String, Object> weightData = new HashMap<>();
+        weightData.put("weight", weightLog.getWeight());
+        // Set data in Firestore and merge with existing data
+        db.collection("Users").document(Objects.requireNonNull(getCurrentUserId()))
+                .set(weightData, SetOptions.merge());
     }
 
     public void logWorkout(WorkoutLog workoutLog) {
@@ -124,21 +132,6 @@ public class ProgressRepository {
                         Log.d("ProgressRepo", "Weight logged successfully"))
                 .addOnFailureListener(e ->
                         Log.w("ProgressRepo", "Error logging weight", e));
-    }
-
-    private void executeFirestoreOperation(String collectionPath,
-                                           Object data,
-                                           String successMessage,
-                                           String errorMessage) {
-        String userId = getCurrentUserId();
-        if (userId == null) return;
-
-        db.document(collectionPath)
-                .set(data)
-                .addOnSuccessListener(documentReference ->
-                        Log.d("Firestore", successMessage))
-                .addOnFailureListener(e ->
-                        logError(errorMessage + ": " + e.getMessage()));
     }
 
     // LiveData Getters

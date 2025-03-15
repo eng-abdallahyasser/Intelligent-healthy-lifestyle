@@ -1,5 +1,7 @@
 package com.tm471a.intelligenthealthylifestyle.features.profile;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -7,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.tm471a.intelligenthealthylifestyle.data.model.User;
+import com.tm471a.intelligenthealthylifestyle.data.model.WeightLog;
 
 import java.util.Objects;
 
@@ -42,6 +45,14 @@ public class ProfileViewModel extends ViewModel {
                 .set(user)
                 .addOnSuccessListener(aVoid -> updateStatus.postValue(true))
                 .addOnFailureListener(e -> updateStatus.postValue(false));
+
+        db.collection("Users").document(user.getUid())
+                .collection("weight_logs")
+                .add(new WeightLog(user.getWeight()).toMap())
+                .addOnSuccessListener(documentReference ->
+                        Log.d("Profile vm", "Weight logged successfully"))
+                .addOnFailureListener(e ->
+                        Log.w("Profile vm", "Error logging weight", e));
     }
 
     // Expose LiveData

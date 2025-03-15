@@ -121,7 +121,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="250dp"
             android:layout_marginTop="16dp">
 
             <com.github.mikephil.charting.charts.LineChart
@@ -134,7 +134,7 @@
         <!-- Workout Chart Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="250dp"
             android:layout_marginTop="16dp">
 
             <com.github.mikephil.charting.charts.BarChart
@@ -147,7 +147,7 @@
         <!-- Measurements Chart Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="250dp"
             android:layout_marginTop="16dp">
 
             <com.github.mikephil.charting.charts.LineChart

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -21,12 +22,15 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.tm471a.intelligenthealthylifestyle.R;
 import com.tm471a.intelligenthealthylifestyle.data.model.MeasurementLog;
 import com.tm471a.intelligenthealthylifestyle.data.model.WeightLog;
 import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutLog;
 import com.tm471a.intelligenthealthylifestyle.databinding.FragmentProgressBinding;
+import com.tm471a.intelligenthealthylifestyle.utils.DateAxisFormatter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class ProgressFragment extends Fragment {
@@ -114,14 +118,13 @@ public class ProgressFragment extends Fragment {
         chart.setScaleEnabled(true);
 
         XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
 
         YAxis yAxis = chart.getAxisLeft();
         yAxis.setGranularity(1f);
         yAxis.setAxisMinimum(0f);
 
         chart.getAxisRight().setEnabled(false);
+        setupDateAxis(xAxis);
     }
 
     private void setupWorkoutChart() {
@@ -129,8 +132,7 @@ public class ProgressFragment extends Fragment {
         chart.getDescription().setText("Workout Sessions");
 
         XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
+        setupDateAxis(xAxis);
 
         YAxis yAxis = chart.getAxisLeft();
         yAxis.setGranularity(1f);
@@ -147,14 +149,19 @@ public class ProgressFragment extends Fragment {
         chart.setScaleEnabled(true);
 
         XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
+        setupDateAxis(xAxis);
 
         YAxis yAxis = chart.getAxisLeft();
         yAxis.setGranularity(1f);
         yAxis.setAxisMinimum(0f);
 
         chart.getAxisRight().setEnabled(false);
+    }
+    private void setupDateAxis(XAxis xAxis) {
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        xAxis.setValueFormatter(new DateAxisFormatter());
+        xAxis.setLabelRotationAngle(-45);
     }
 
     private void setupObservers() {
@@ -165,13 +172,13 @@ public class ProgressFragment extends Fragment {
 
     private void updateWeightChart(List<WeightLog> weightLogs) {
         List<Entry> entries = new ArrayList<>();
-        for (int i = 0; i < weightLogs.size(); i++) {
-            entries.add(new Entry(i,(float) weightLogs.get(i).getWeight()));
+        for (WeightLog log : weightLogs) {
+            float timestamp = (float) log.getDate().toDate().getTime()-getBaseTimestamp();
+            entries.add(new Entry(timestamp, (float) log.getWeight()));
         }
 
-        LineDataSet dataSet = new LineDataSet(entries, "Weight");
-        dataSet.setColor(Color.BLUE);
-        dataSet.setCircleColor(Color.BLUE);
+        LineDataSet dataSet = new LineDataSet(entries, "Weight (kg)");
+        configureLineDataSet(dataSet, ContextCompat.getColor(getContext(), R.color.primary_color));
 
         binding.weightChart.setData(new LineData(dataSet));
         binding.weightChart.invalidate();
@@ -179,14 +186,18 @@ public class ProgressFragment extends Fragment {
 
     private void updateWorkoutChart(List<WorkoutLog> workoutLogs) {
         List<BarEntry> entries = new ArrayList<>();
-        for (int i = 0; i < workoutLogs.size(); i++) {
-            entries.add(new BarEntry(i, workoutLogs.get(i).getCount()));
+        for (WorkoutLog log: workoutLogs) {
+            float timestamp = (float) log.getDate().toDate().getTime()-getBaseTimestamp();
+            entries.add(new BarEntry(timestamp, log.getCount()));
         }
 
         BarDataSet dataSet = new BarDataSet(entries, "Workouts");
-        dataSet.setColor(Color.GREEN);
+        dataSet.setColor(ContextCompat.getColor(getContext(), R.color.primary_color));
 
-        binding.workoutChart.setData(new BarData(dataSet));
+        BarData barData = new BarData(dataSet);
+        barData.setBarWidth(3600000);
+
+        binding.workoutChart.setData(barData);
         binding.workoutChart.invalidate();
     }
 
@@ -195,23 +206,38 @@ public class ProgressFragment extends Fragment {
         List<Entry> waistEntries = new ArrayList<>();
         List<Entry> hipsEntries = new ArrayList<>();
 
-        for (int i = 0; i < measurementLogs.size(); i++) {
-            MeasurementLog log = measurementLogs.get(i);
-            chestEntries.add(new Entry(i,(float) log.getChest()));
-            waistEntries.add(new Entry(i,(float) log.getWaist()));
-            hipsEntries.add(new Entry(i,(float) log.getHips()));
+        for (MeasurementLog log: measurementLogs) {
+            float timestamp = (float) log.getDate().toDate().getTime()-getBaseTimestamp();
+
+            chestEntries.add(new Entry(timestamp,(float) log.getChest()));
+            waistEntries.add(new Entry(timestamp,(float) log.getWaist()));
+            hipsEntries.add(new Entry(timestamp,(float) log.getHips()));
         }
 
         LineDataSet chestDataSet = new LineDataSet(chestEntries, "Chest");
-        chestDataSet.setColor(Color.RED);
+        chestDataSet.setColor(Color.CYAN);
 
         LineDataSet waistDataSet = new LineDataSet(waistEntries, "Waist");
-        waistDataSet.setColor(Color.BLUE);
+        waistDataSet.setColor(ContextCompat.getColor(getContext(), R.color.primary_color));
 
         LineDataSet hipsDataSet = new LineDataSet(hipsEntries, "Hips");
-        hipsDataSet.setColor(Color.GREEN);
+        hipsDataSet.setColor(ContextCompat.getColor(getContext(), R.color.accent_color));
 
         binding.measurementChart.setData(new LineData(chestDataSet, waistDataSet, hipsDataSet));
         binding.measurementChart.invalidate();
+    }
+    private void configureLineDataSet(LineDataSet dataSet, int color) {
+        dataSet.setColor(color);
+        dataSet.setCircleColor(color);
+        dataSet.setCircleRadius(4f);
+        dataSet.setLineWidth(2f);
+        dataSet.setValueTextSize(10f);
+        dataSet.setDrawValues(false);
+    }
+    private long getBaseTimestamp() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2025, Calendar.MARCH, 1, 0, 0, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTimeInMillis();
     }
 }
