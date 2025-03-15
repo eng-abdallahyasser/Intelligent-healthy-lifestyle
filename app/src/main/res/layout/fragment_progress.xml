@@ -119,5 +119,43 @@
                 android:text="Log Measurements"/>
         </LinearLayout>
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="16dp">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/weightChart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Workout Chart Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="16dp">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/workoutChart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Measurements Chart Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="16dp">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/measurementChart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 </ScrollView>

@@ -49,6 +49,7 @@ dependencies {
     implementation libs.okhttp
     implementation libs.logging.interceptor
     implementation libs.json
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation libs.firebase.crashlytics.buildtools
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit

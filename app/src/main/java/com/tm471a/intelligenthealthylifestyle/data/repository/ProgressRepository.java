@@ -108,7 +108,7 @@ public class ProgressRepository {
 
     public void logWorkout(WorkoutLog workoutLog) {
         db.collection("Users").document(Objects.requireNonNull(getCurrentUserId()))
-                .collection("weight_logs")
+                .collection("workout_logs")
                 .add(workoutLog.toMap())
                 .addOnSuccessListener(documentReference ->
                         Log.d("ProgressRepo", "Weight logged successfully"))
@@ -118,7 +118,7 @@ public class ProgressRepository {
 
     public void logMeasurement(MeasurementLog measurementLog) {
         db.collection("Users").document(Objects.requireNonNull(getCurrentUserId()))
-                .collection("weight_logs")
+                .collection("measurement_logs")
                 .add(measurementLog.toMap())
                 .addOnSuccessListener(documentReference ->
                         Log.d("ProgressRepo", "Weight logged successfully"))

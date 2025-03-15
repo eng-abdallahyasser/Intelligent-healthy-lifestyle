@@ -28,4 +28,7 @@ public class ProgressViewModel extends ViewModel {
     public LiveData<List<WorkoutLog>> getWorkoutLogs() {
         return repo.getWorkoutLogs();
     }
+    public LiveData<List<MeasurementLog>> getMeasurementLogs() {
+        return repo.getMeasurementLogs();
+    }
 }
