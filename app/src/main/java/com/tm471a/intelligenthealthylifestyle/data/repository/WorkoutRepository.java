@@ -39,6 +39,8 @@ public class WorkoutRepository {
     private final OkHttpClient client;
     private final Gson gson;
     private final MutableLiveData<Boolean> isInitialized = new MutableLiveData<>(false);
+    private String geminiApiKey;
+    private User userData= new User();
 
     public WorkoutRepository() {
         loadUserData();
@@ -51,8 +53,7 @@ public class WorkoutRepository {
 
     }
 
-    private String geminiApiKey;
-    private User userData= new User();
+
     private void loadApiKey() {
         db.collection("Keys").document("gemimi_api_key").get()
                 .addOnSuccessListener(documentSnapshot -> {

@@ -1,6 +1,7 @@
 package com.tm471a.intelligenthealthylifestyle.features.nutrition;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ public class NutritionFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentNutritionBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(NutritionViewModel.class);
+        binding.cvHeader.setVisibility(View.GONE);
+        binding.cvNutrition.setVisibility(View.GONE);
 
         setupObservers();
         setupClickListeners();
@@ -30,12 +33,33 @@ public class NutritionFragment extends Fragment {
     }
 
     private void setupObservers() {
+        viewModel.getNutritionAdvice().observe(getViewLifecycleOwner(), nutritionAdvice -> {
+            binding.tvTitle.setText(nutritionAdvice.getSeoTitle());
+            binding.tvSeoContent.setText(nutritionAdvice.getDescription());
+            binding.tvGoal.setText(nutritionAdvice.getGoal());
+            binding.tvDescription.setText(nutritionAdvice.getSeoContent());
+
+            binding.tvCarbs.setText(nutritionAdvice.getMacronutrients().getCarbohydrates());
+            binding.progressCarbs.setProgress(formJsonToInt(nutritionAdvice.getMacronutrients().getCarbohydrates()));
+            binding.tvProteins.setText(nutritionAdvice.getMacronutrients().getProteins());
+            binding.progressProteins.setProgress(formJsonToInt(nutritionAdvice.getMacronutrients().getProteins()));
+            binding.tvFats.setText(nutritionAdvice.getMacronutrients().getFats());
+            binding.progressFats.setProgress(formJsonToInt(nutritionAdvice.getMacronutrients().getFats()));
+
+            binding.cvHeader.setVisibility(View.VISIBLE);
+            binding.cvNutrition.setVisibility(View.VISIBLE);
+
+        } );
 
     }
 
+    private int formJsonToInt(String input) {
+        return Integer.parseInt(input.split(" ")[0].replaceAll("[^0-9]", ""));
+    }
     private void setupClickListeners() {
-//        binding.fabAddNutritionAdvice.setOnClickListener(v -> {
-//            // Navigate to add meal screen
-//        });
+        binding.fabAddNutritionAdvice.setOnClickListener(v -> {
+            Log.d("NutritionFragment", "FAB clicked!");
+            viewModel.generateNutritionAdvice();
+        });
     }
 }
