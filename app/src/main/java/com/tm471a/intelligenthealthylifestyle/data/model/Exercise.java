@@ -19,10 +19,10 @@ public class Exercise {
     private List<String> equipment;
 
     @SerializedName("sets")
-    private int sets;
+    private String sets;
 
     @SerializedName("reps")
-    private int reps;
+    private String reps;
 
     public Exercise() {}
 
@@ -57,19 +57,19 @@ public class Exercise {
         this.equipment = equipment;
     }
 
-    public int getSets() {
+    public String getSets() {
         return sets;
     }
 
-    public void setSets(int sets) {
+    public void setSets(String sets) {
         this.sets = sets;
     }
 
-    public int getReps() {
+    public String getReps() {
         return reps;
     }
 
-    public void setReps(int reps) {
+    public void setReps(String reps) {
         this.reps = reps;
     }
 }

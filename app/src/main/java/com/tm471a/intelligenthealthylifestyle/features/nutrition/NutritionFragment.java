@@ -34,8 +34,8 @@ public class NutritionFragment extends Fragment {
     }
 
     private void setupClickListeners() {
-        binding.fabAddMeal.setOnClickListener(v -> {
-            // Navigate to add meal screen
-        });
+//        binding.fabAddNutritionAdvice.setOnClickListener(v -> {
+//            // Navigate to add meal screen
+//        });
     }
 }

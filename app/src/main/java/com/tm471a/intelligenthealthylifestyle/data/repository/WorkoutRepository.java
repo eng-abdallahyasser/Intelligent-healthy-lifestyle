@@ -117,8 +117,8 @@ public class WorkoutRepository {
                             "      \"description\": \"detailed instructions\", " +
                             "      \"primary_muscles\": [\"muscle1\", \"muscle2\"], " +
                             "      \"equipment\": [\"equipment1\"], " +
-                            "      \"sets\": 3(must be integer), " +
-                            "      \"reps\": 12(must be integer) " +
+                            "      \"sets\": \" 3 \", " +
+                            "      \"reps\": \"12 \"" +
                             "    } " +
                             "  ] " +
                             "}",
