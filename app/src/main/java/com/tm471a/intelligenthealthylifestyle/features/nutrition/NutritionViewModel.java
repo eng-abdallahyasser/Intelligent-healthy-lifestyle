@@ -8,12 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.gson.Gson;
 import com.tm471a.intelligenthealthylifestyle.data.model.NutritionAdvice;
-import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutPlan;
 import com.tm471a.intelligenthealthylifestyle.data.repository.NutritionRepository;
-import com.tm471a.intelligenthealthylifestyle.data.repository.WorkoutRepository;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class NutritionViewModel extends ViewModel {
     private final NutritionRepository repository = new NutritionRepository();
@@ -61,7 +56,4 @@ public class NutritionViewModel extends ViewModel {
         return nutritionAdvice;
     }
 
-    public LiveData<String> getErrorMessage() {
-        return errorMessage;
-    }
 }

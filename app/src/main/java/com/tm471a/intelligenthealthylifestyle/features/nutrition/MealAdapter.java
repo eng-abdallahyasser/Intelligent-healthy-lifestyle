@@ -1,17 +1,16 @@
 package com.tm471a.intelligenthealthylifestyle.features.nutrition;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tm471a.intelligenthealthylifestyle.R;
 import com.tm471a.intelligenthealthylifestyle.data.model.Meal;
-import com.tm471a.intelligenthealthylifestyle.data.model.Suggestion;
 
 import java.util.List;
 
@@ -20,6 +19,7 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
 
     public MealAdapter(List<Meal> meals) {
         this.meals = meals;
+        Log.d("MealAdapter", "MealAdapter() called   meal count = "+meals.size());
     }
 
     @NonNull
@@ -34,11 +34,15 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
     public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
 
         Meal meal = meals.get(position);
-        holder.bind(meal);
+        Log.d("MealAdapter", "Binding meal: " + meal.getName());
+        holder.tvMealName.setText(meal.getName());
+        holder.tvCalories.setText(meal.getCalories());
+        holder.tvIngredients.setText(meal.getIngredients().toString());
     }
 
     @Override
     public int getItemCount() {
+        Log.d("MealAdapter", "getItemCount() called - size: " + meals.size());
         return meals.size();
     }
 

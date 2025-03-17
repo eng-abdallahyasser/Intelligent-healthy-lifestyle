@@ -85,7 +85,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:orientation="horizontal"
-                        android:padding="16dp"
                         android:weightSum="3">
 
                         <!-- Carbohydrates Progress -->

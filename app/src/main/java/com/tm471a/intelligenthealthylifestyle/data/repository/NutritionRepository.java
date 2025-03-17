@@ -2,12 +2,10 @@ package com.tm471a.intelligenthealthylifestyle.data.repository;
 
 import android.annotation.SuppressLint;
 
-import androidx.lifecycle.LiveData;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.gson.Gson;
 import com.tm471a.intelligenthealthylifestyle.data.model.NutritionAdvice;
 import com.tm471a.intelligenthealthylifestyle.data.model.User;
@@ -17,8 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -31,10 +29,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 public class NutritionRepository {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final MutableLiveData<NutritionAdvice> nutritionAdvice = new MutableLiveData<>();
-
     private final OkHttpClient client;
-    private final Gson gson;
     private final MutableLiveData<Boolean> isInitialized = new MutableLiveData<>(false);
     private final String BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
     private String geminiApiKey;
@@ -44,7 +39,6 @@ public class NutritionRepository {
         this.client = new OkHttpClient.Builder()
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .build();
-        this.gson = new Gson();
         loadApiKey();
         loadUserData();
     }
@@ -60,7 +54,7 @@ public class NutritionRepository {
                 });
     }
     private void loadUserData() {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         db.collection("Users").document(uid).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     userData = documentSnapshot.toObject(User.class);
@@ -143,18 +137,19 @@ public class NutritionRepository {
 
             client.newCall(request).enqueue(new Callback() {
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     callback.onError("Network error: " + e.getMessage());
                 }
 
                 @Override
-                public void onResponse(Call call, Response response) throws IOException {
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     if (!response.isSuccessful()) {
                         callback.onError("API error: " + response.code());
                         return;
                     }
 
                     try {
+                        assert response.body() != null;
                         String responseBody = response.body().string();
                         JSONObject jsonResponse = new JSONObject(responseBody);
                         JSONArray candidates = jsonResponse.getJSONArray("candidates");

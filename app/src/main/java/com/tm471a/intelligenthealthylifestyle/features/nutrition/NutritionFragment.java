@@ -1,5 +1,6 @@
 package com.tm471a.intelligenthealthylifestyle.features.nutrition;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.tm471a.intelligenthealthylifestyle.databinding.FragmentNutritionBinding;
 
@@ -32,12 +34,14 @@ public class NutritionFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @SuppressLint("SetTextI18n")
     private void setupObservers() {
         viewModel.getNutritionAdvice().observe(getViewLifecycleOwner(), nutritionAdvice -> {
             binding.tvTitle.setText(nutritionAdvice.getSeoTitle());
             binding.tvSeoContent.setText(nutritionAdvice.getDescription());
             binding.tvGoal.setText(nutritionAdvice.getGoal());
             binding.tvDescription.setText(nutritionAdvice.getSeoContent());
+            binding.tvCalories.setText(nutritionAdvice.getCaloriesPerDay()+" calories per day");
 
             binding.tvCarbs.setText(nutritionAdvice.getMacronutrients().getCarbohydrates());
             binding.progressCarbs.setProgress(formJsonToInt(nutritionAdvice.getMacronutrients().getCarbohydrates()));
@@ -45,6 +49,9 @@ public class NutritionFragment extends Fragment {
             binding.progressProteins.setProgress(formJsonToInt(nutritionAdvice.getMacronutrients().getProteins()));
             binding.tvFats.setText(nutritionAdvice.getMacronutrients().getFats());
             binding.progressFats.setProgress(formJsonToInt(nutritionAdvice.getMacronutrients().getFats()));
+
+            MealAdapter mealAdapter=new MealAdapter(nutritionAdvice.getMealSuggestions().get(0).getSuggestions());
+            binding.rvMeals.setAdapter(mealAdapter);
 
             binding.cvHeader.setVisibility(View.VISIBLE);
             binding.cvNutrition.setVisibility(View.VISIBLE);
