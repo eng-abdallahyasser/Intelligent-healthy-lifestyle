@@ -1,6 +1,5 @@
 package com.tm471a.intelligenthealthylifestyle.features.nutrition;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +14,11 @@ import com.tm471a.intelligenthealthylifestyle.data.model.Meal;
 import java.util.List;
 
 public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder> {
-    private List<Meal> meals;
 
-    public MealAdapter(List<Meal> meals) {
-        this.meals = meals;
-        Log.d("MealAdapter", "MealAdapter() called   meal count = "+meals.size());
+    private final List<Meal> mealList;
+
+    public MealAdapter(List<Meal> mealList) {
+        this.mealList = mealList;
     }
 
     @NonNull
@@ -32,37 +31,25 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
-
-        Meal meal = meals.get(position);
-        Log.d("MealAdapter", "Binding meal: " + meal.getName());
-        holder.tvMealName.setText(meal.getName());
-        holder.tvCalories.setText(meal.getCalories());
-        holder.tvIngredients.setText(meal.getIngredients().toString());
+        Meal meal = mealList.get(position);
+        holder.mealName.setText(meal.getName());
+        holder.mealIngredients.setText("Ingredients: " + String.join(", ", meal.getIngredients()));
+        holder.mealCalories.setText("Calories: " + meal.getCalories());
     }
 
     @Override
     public int getItemCount() {
-        Log.d("MealAdapter", "getItemCount() called - size: " + meals.size());
-        return meals.size();
+        return mealList.size();
     }
 
     static class MealViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvMealName;
-        private TextView tvCalories;
-        private TextView tvIngredients;
-        private RecyclerView rvSuggestions;
+        TextView mealName, mealIngredients, mealCalories;
 
         public MealViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvMealName= itemView.findViewById(R.id.tvMealName);
-            tvCalories= itemView.findViewById(R.id.tvCalories);
-            tvIngredients= itemView.findViewById(R.id.tvIngredients);
-        }
-
-        public void bind(Meal meal) {
-            tvMealName.setText(meal.getName());
-            tvCalories.setText(meal.getCalories());
-            tvIngredients.setText(meal.getIngredients().toString());
+            mealName = itemView.findViewById(R.id.tvMealName);
+            mealIngredients = itemView.findViewById(R.id.tvIngredients);
+            mealCalories = itemView.findViewById(R.id.tvCalories);
         }
     }
 }

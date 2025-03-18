@@ -22,6 +22,11 @@
         android:name="com.tm471a.intelligenthealthylifestyle.features.progress.ProgressFragment"
         android:label="Progress"
         tools:layout="@layout/fragment_progress" />
+    <fragment
+        android:id="@+id/nav_plan"
+        android:name="com.tm471a.intelligenthealthylifestyle.features.myplan.MyPlanFragment"
+        android:label="My Plan"
+        tools:layout="@layout/fragment_my_plan" />
 
     <fragment
         android:id="@+id/nav_assistant"
@@ -34,5 +39,13 @@
         android:name="com.tm471a.intelligenthealthylifestyle.features.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/workoutDetailFragment"
+        android:name="com.tm471a.intelligenthealthylifestyle.features.workout.WorkoutDetailFragment"
+        android:label="Workout Details">
+        <argument
+            android:name="workoutPlan"
+            app:argType="com.tm471a.intelligenthealthylifestyle.data.model.WorkoutPlan" />
+    </fragment>
 
 </navigation>

@@ -4,6 +4,7 @@
         android:id="@+id/nav_workout"
         android:icon="@drawable/ic_workout"
         android:title="Workout" />
+
     <item
         android:id="@+id/nav_nutrition"
         android:icon="@drawable/ic_nutrition"

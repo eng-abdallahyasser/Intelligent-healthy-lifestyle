@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +34,8 @@ public class WorkoutFragment extends Fragment {
     private void setupObservers() {
         viewModel.getWorkoutPlans().observe(getViewLifecycleOwner(), plans -> {
             if (plans != null && !plans.isEmpty()) {
-                WorkoutAdapter adapter = new WorkoutAdapter(plans);
+                NavController navController = Navigation.findNavController(requireView());
+                WorkoutAdapter adapter = new WorkoutAdapter(plans,navController);
                 binding.rvWorkouts.setAdapter(adapter);
             }
         });

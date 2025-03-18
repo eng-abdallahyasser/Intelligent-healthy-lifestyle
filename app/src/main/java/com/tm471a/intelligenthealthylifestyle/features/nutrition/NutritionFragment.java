@@ -27,6 +27,7 @@ public class NutritionFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(NutritionViewModel.class);
         binding.cvHeader.setVisibility(View.GONE);
         binding.cvNutrition.setVisibility(View.GONE);
+        binding.rvMeals.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         setupObservers();
         setupClickListeners();
@@ -50,8 +51,8 @@ public class NutritionFragment extends Fragment {
             binding.tvFats.setText(nutritionAdvice.getMacronutrients().getFats());
             binding.progressFats.setProgress(formJsonToInt(nutritionAdvice.getMacronutrients().getFats()));
 
-            MealAdapter mealAdapter=new MealAdapter(nutritionAdvice.getMealSuggestions().get(0).getSuggestions());
-            binding.rvMeals.setAdapter(mealAdapter);
+            MealSuggestionAdapter mealSuggestionAdapter=new MealSuggestionAdapter(nutritionAdvice.getMealSuggestions());
+            binding.rvMeals.setAdapter(mealSuggestionAdapter);
 
             binding.cvHeader.setVisibility(View.VISIBLE);
             binding.cvNutrition.setVisibility(View.VISIBLE);

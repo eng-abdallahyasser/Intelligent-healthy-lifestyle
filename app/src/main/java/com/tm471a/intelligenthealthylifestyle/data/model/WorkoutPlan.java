@@ -3,9 +3,10 @@ package com.tm471a.intelligenthealthylifestyle.data.model;
 import com.google.firebase.firestore.PropertyName;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class WorkoutPlan {
+public class WorkoutPlan implements Serializable {
     @SerializedName("plan_name")
     private String planName;
 
