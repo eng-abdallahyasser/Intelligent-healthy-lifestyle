@@ -4,6 +4,6 @@
         <item name="colorPrimaryVariant">#1565C0</item>
         <item name="colorOnPrimary">@color/on_primary</item>
 <!--        <item name="android:windowBackground">@color/dark_background</item>-->
-        <item name="colorSurface">#121212</item>
+        <item name="colorSurface">#1A1A19</item>
     </style>
 </resources>
