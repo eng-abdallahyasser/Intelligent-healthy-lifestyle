@@ -39,7 +39,7 @@ public class WorkoutRepository {
     private final MutableLiveData<List<WorkoutPlan>> workoutPlans = new MutableLiveData<>();
     private final String BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
     private final OkHttpClient client;
-    private final MutableLiveData<Boolean> isInitialized = new MutableLiveData<>(false);
+    final MutableLiveData<Boolean> isInitialized = new MutableLiveData<>(false);
     private String geminiApiKey;
     private User userData= new User();
 
@@ -73,7 +73,7 @@ public class WorkoutRepository {
             isInitialized.postValue(true);
         }
     }
-    public LiveData<Boolean> getIsInitialized() {
+    public MutableLiveData<Boolean> getIsInitialized() {
         return isInitialized;
     }
     public MutableLiveData<List<WorkoutPlan>> getWorkoutPlans(String userId) {
@@ -110,16 +110,122 @@ public class WorkoutRepository {
                             "Generate a JSON-formatted workout plan with this structure: " +
                             "{ " +
                             "  \"plan_name\": \"name\", " +
+                            "  \"goal\": \"workout goal\", " +
                             "  \"duration\": \"duration\", " +
+                            "  \"days_per_week\": \"days per week\", " +
+                            "  \"session_duration\": \"session duration for one day\", " +
                             "  \"difficulty\": \"level\", " +
-                            "  \"exercises\": [ " +
+                            "  \"workout_day_list\": [ " +
                             "    { " +
-                            "      \"name\": \"exercise name\", " +
-                            "      \"description\": \"detailed instructions\", " +
-                            "      \"primary_muscles\": [\"muscle1\", \"muscle2\"], " +
-                            "      \"equipment\": [\"equipment1\"], " +
-                            "      \"sets\": \" 3 \", " +
-                            "      \"reps\": \"12 \"" +
+                            "      \"day\": \"day\", " +
+                            "      \"exercises\": [ " +
+                            "          { " +
+                            "          \"name\": \"exercise name\", " +
+                            "          \"description\": \"detailed instructions\", " +
+                            "          \"primary_muscles\": [\"muscle1\", \"muscle2\"], " +
+                            "          \"equipment\": [\"equipment1\"], " +
+                            "          \"sets\": \" 3 \", " +
+                            "          \"reps\": \"12 \"" +
+                            "        } " +
+                            "      ] " +
+                            "    } " +
+                            "  ] " +
+                            "}",
+                    userData.getName(),
+                    userData.getAge(),
+                    userData.getHeight(),
+                    userData.getWeight(),
+                    String.join(", ", userData.getFitnessGoals()),
+                    String.join(", ", userData.getDietaryPreferences())
+            );
+
+            // 2. Build JSON request
+            JSONObject requestBody = new JSONObject()
+                    .put("contents", new JSONArray()
+                            .put(new JSONObject()
+                                    .put("parts", new JSONArray()
+                                            .put(new JSONObject()
+                                                    .put("text", systemInstruction)
+                                            )
+                                    )
+                            )
+                    );
+            RequestBody body = RequestBody.create(
+                    requestBody.toString(),
+                    MediaType.parse("application/json; charset=utf-8")
+            );
+
+            Request request = new Request.Builder()
+                    .url(BASE_URL + "?key=" + geminiApiKey)
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    callback.onError("Network error: " + e.getMessage());
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) {
+                    if (!response.isSuccessful()) {
+                        callback.onError("API error: " + response.code());
+                        return;
+                    }
+
+                    try {
+                        assert response.body() != null;
+                        String responseBody = response.body().string();
+                        JSONObject jsonResponse = new JSONObject(responseBody);
+                        JSONArray candidates = jsonResponse.getJSONArray("candidates");
+
+                        if (candidates.length() > 0) {
+                            String planJson = candidates.getJSONObject(0)
+                                    .getJSONObject("content")
+                                    .getJSONArray("parts")
+                                    .getJSONObject(0)
+                                    .getString("text");
+
+                            callback.onResponse(planJson);
+                        }
+                    } catch (Exception e) {
+                        callback.onError("Parsing error: " + e.getMessage());
+                    }
+
+                }
+            });
+        } catch (Exception e) {
+            callback.onError("Request error: " + e.getMessage());
+        }
+    }
+    public void initFourWorkoutPlan( WorkoutRepository.ResponseCallback callback) {
+        try {
+            // 1. Create system instruction with user data
+            @SuppressLint("DefaultLocale") String systemInstruction = String.format(
+                    "You are a fitness assistant helping %s (%d years old). " +
+                            "They are %.1f cm tall and weigh %.1f kg. " +
+                            "Fitness goals: %s. Dietary preferences: %s. " +
+                            "Generate a JSON-formatted 3 suggested workouts plans with different difficulty levels with this structure: " +
+                            "{ " +
+                            "  \"plan_name\": \"name\", " +
+                            "  \"goal\": \"workout goal\", " +
+                            "  \"duration\": \"duration\", " +
+                            "  \"days_per_week\": \"days per week\", " +
+                            "  \"session_duration\": \"session duration for one day\", " +
+                            "  \"difficulty\": \"level\", " +
+                            "  \"workout_day_list\": [ " +
+                            "    { " +
+                            "      \"day\": \"day\", " +
+                            "      \"exercises\": [ " +
+                            "          { " +
+                            "          \"name\": \"exercise name\", " +
+                            "          \"description\": \"detailed instructions\", " +
+                            "          \"primary_muscles\": [\"muscle1\", \"muscle2\"], " +
+                            "          \"equipment\": [\"equipment1\"], " +
+                            "          \"sets\": \" 3 \", " +
+                            "          \"reps\": \"12 \"" +
+                            "        } " +
+                            "      ] " +
                             "    } " +
                             "  ] " +
                             "}",

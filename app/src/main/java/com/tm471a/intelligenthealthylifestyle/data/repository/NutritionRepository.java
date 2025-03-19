@@ -35,6 +35,10 @@ public class NutritionRepository {
     private String geminiApiKey;
     private User userData= new User();
 
+    public MutableLiveData<Boolean> getIsInitialized() {
+        return isInitialized;
+    }
+
     public NutritionRepository() {
         this.client = new OkHttpClient.Builder()
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))

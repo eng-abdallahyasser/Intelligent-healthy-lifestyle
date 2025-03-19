@@ -2,7 +2,6 @@ package com.tm471a.intelligenthealthylifestyle.features.nutrition;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -13,14 +12,18 @@ import com.tm471a.intelligenthealthylifestyle.data.repository.NutritionRepositor
 public class NutritionViewModel extends ViewModel {
     private final NutritionRepository repository = new NutritionRepository();
     private final MutableLiveData<NutritionAdvice> nutritionAdvice = new MutableLiveData<>();
-    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
+    private final MutableLiveData<String> statusMessage = new MutableLiveData<>("Initiating...");
     private final Gson gson;
 
     public NutritionViewModel() {
         this.gson = new Gson();
+        repository.getIsInitialized().observeForever(isReady->{
+            if (isReady) generateNutritionAdvice();
+        });
     }
 
     public void generateNutritionAdvice() {
+        statusMessage.postValue("Loading...");
 
         repository.generateNutritionAdvice( new NutritionRepository.ResponseCallback() {
             @Override
@@ -28,25 +31,24 @@ public class NutritionViewModel extends ViewModel {
                 try {
                     String cleanedJson = response.replaceAll("```json\n|```", "");
                     NutritionAdvice generatedNutritionAdvice = gson.fromJson(cleanedJson, NutritionAdvice.class);
-                    NutritionAdvice testAdvice = new NutritionAdvice();
-                    testAdvice.setSeoTitle("Test Title");
-                    testAdvice.setDescription("This is a test description.");
-                    testAdvice.setGoal("Weight Loss");
+
                     if(generatedNutritionAdvice!=null){
                     nutritionAdvice.postValue(generatedNutritionAdvice);}
                     else {
-                        nutritionAdvice.postValue(testAdvice);
+                        statusMessage.postValue("NutritionViewModel : generatedNutritionAdvice is null");
                     }
+                    statusMessage.postValue("done");
                     Log.d("NutritionViewModel", "generateNutritionAdvice() called");
                 } catch (Exception e) {
                     // Handle parsing errors
+                    statusMessage.postValue(e.getMessage());
                 }
             }
 
             @Override
             public void onError(String error) {
                 // Handle errors
-
+                statusMessage.postValue(error);
             }
         });
 
@@ -56,4 +58,7 @@ public class NutritionViewModel extends ViewModel {
         return nutritionAdvice;
     }
 
+    public MutableLiveData<String> getStatusMessage() {
+        return statusMessage;
+    }
 }

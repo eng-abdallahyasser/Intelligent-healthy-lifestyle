@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.tm471a.intelligenthealthylifestyle.R;
 import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutPlan;
 import com.tm471a.intelligenthealthylifestyle.databinding.FragmentWorkoutDetailBinding;
 
@@ -60,7 +59,7 @@ public class WorkoutDetailFragment extends Fragment {
             binding.tvDifficulty.setText("Difficulty: " + workoutPlan.getDifficulty());
 
             // Setup RecyclerView for Exercises
-            ExerciseAdapter adapter = new ExerciseAdapter(workoutPlan.getExercises());
+            ExerciseAdapter adapter = new ExerciseAdapter(workoutPlan.getWorkoutDayList().get(0).getExercises());
             binding.rvExercises.setLayoutManager(new LinearLayoutManager(getContext()));
             binding.rvExercises.setAdapter(adapter);
 

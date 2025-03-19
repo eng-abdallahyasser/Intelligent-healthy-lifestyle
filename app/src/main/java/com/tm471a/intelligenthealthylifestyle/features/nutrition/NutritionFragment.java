@@ -25,9 +25,8 @@ public class NutritionFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentNutritionBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(NutritionViewModel.class);
-        binding.cvHeader.setVisibility(View.GONE);
-        binding.cvNutrition.setVisibility(View.GONE);
         binding.rvMeals.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.nutritionContentLayout.setVisibility(View.GONE);
 
         setupObservers();
         setupClickListeners();
@@ -54,10 +53,27 @@ public class NutritionFragment extends Fragment {
             MealSuggestionAdapter mealSuggestionAdapter=new MealSuggestionAdapter(nutritionAdvice.getMealSuggestions());
             binding.rvMeals.setAdapter(mealSuggestionAdapter);
 
-            binding.cvHeader.setVisibility(View.VISIBLE);
-            binding.cvNutrition.setVisibility(View.VISIBLE);
-
         } );
+        viewModel.getStatusMessage().observe(getViewLifecycleOwner(),status->{
+            binding.tvMessage.setText(status);
+            if (status=="Initiating...") {
+                binding.statusCardView.setVisibility(View.VISIBLE);
+                binding.circularProgress.setVisibility(View.VISIBLE);
+                binding.tvMessage.setVisibility(View.VISIBLE);
+            }
+            else if(status=="Loading..."){
+                binding.statusCardView.setVisibility(View.VISIBLE);
+                binding.circularProgress.setVisibility(View.VISIBLE);
+                binding.tvMessage.setVisibility(View.VISIBLE);
+            }
+            else if(status=="done"){
+                binding.statusCardView.setVisibility(View.GONE);
+            }
+            else {
+                binding.tvMessage.setVisibility(View.VISIBLE);
+                binding.circularProgress.setVisibility(View.GONE);
+                binding.statusCardView.setVisibility(View.VISIBLE);}
+        });
 
     }
 

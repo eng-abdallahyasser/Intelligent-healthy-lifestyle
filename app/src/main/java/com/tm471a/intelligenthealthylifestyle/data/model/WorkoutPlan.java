@@ -9,12 +9,18 @@ import java.util.List;
 public class WorkoutPlan implements Serializable {
     @SerializedName("plan_name")
     private String planName;
+    @SerializedName("goal")
+    private String goal;
 
     @SerializedName("duration")
     private String duration;
+    @SerializedName("days_per_week")
+    private String daysPerWeek;
+    @SerializedName("session_duration")
+    private String sessionDuration;
 
-    @SerializedName("exercises")
-    private List<Exercise> exercises;
+    @SerializedName("workout_day_list")
+    private List<WorkoutDay> workoutDayList;
 
     @SerializedName("difficulty")
     private String difficulty;
@@ -22,10 +28,10 @@ public class WorkoutPlan implements Serializable {
     // Firestore requires empty constructor
     public WorkoutPlan() {}
 
-    public WorkoutPlan(String planName, String duration, List<Exercise> exercises, String difficulty) {
+    public WorkoutPlan(String planName, String duration, List<WorkoutDay> exercises, String difficulty) {
         this.planName = planName;
         this.duration = duration;
-        this.exercises = exercises;
+        this.workoutDayList = exercises;
         this.difficulty = difficulty;
     }
 
@@ -43,12 +49,12 @@ public class WorkoutPlan implements Serializable {
         this.duration = duration;
     }
 
-    public List<Exercise> getExercises() {
-        return exercises;
+    public List<WorkoutDay> getWorkoutDayList() {
+        return workoutDayList;
     }
 
-    public void setExercises(List<Exercise> exercises) {
-        this.exercises = exercises;
+    public void setWorkoutDayList(List<WorkoutDay> workoutDayList) {
+        this.workoutDayList = workoutDayList;
     }
 
     public String getDifficulty() {

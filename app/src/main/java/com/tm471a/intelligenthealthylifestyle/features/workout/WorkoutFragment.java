@@ -39,6 +39,27 @@ public class WorkoutFragment extends Fragment {
                 binding.rvWorkouts.setAdapter(adapter);
             }
         });
+        viewModel.getStatusMessage().observe(getViewLifecycleOwner(), massage -> {
+            binding.tvMessage.setText(massage);
+
+            if (massage=="Initiating...") {
+                binding.statusCardView.setVisibility(View.VISIBLE);
+                binding.circularProgress.setVisibility(View.VISIBLE);
+                binding.tvMessage.setVisibility(View.VISIBLE);
+            }
+            else if(massage=="Loading..."){
+                binding.statusCardView.setVisibility(View.VISIBLE);
+                binding.circularProgress.setVisibility(View.VISIBLE);
+                binding.tvMessage.setVisibility(View.VISIBLE);
+            }
+            else if(massage=="done"){
+                binding.statusCardView.setVisibility(View.GONE);
+            }
+            else {
+            binding.tvMessage.setVisibility(View.VISIBLE);
+            binding.circularProgress.setVisibility(View.GONE);
+            binding.statusCardView.setVisibility(View.VISIBLE);}
+        });
     }
 
     private void setupClickListeners() {
