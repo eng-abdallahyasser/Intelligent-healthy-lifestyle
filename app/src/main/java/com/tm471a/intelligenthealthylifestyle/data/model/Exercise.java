@@ -6,36 +6,47 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Exercise {
-    @SerializedName("name")
+    @PropertyName("name")
     private String name;
 
-    @SerializedName("description")
+    @PropertyName("description")
     private String description;
 
-    @SerializedName("primary_muscles")
+    @PropertyName("primary_muscles")
     private List<String> primaryMuscles;
 
-    @SerializedName("equipment")
+    @PropertyName("equipment")
     private List<String> equipment;
 
-    @SerializedName("sets")
+    @PropertyName("sets")
     private String sets;
 
-    @SerializedName("reps")
+    @PropertyName("reps")
     private String reps;
 
     public Exercise() {}
 
-    // Getters and setters with @PropertyName annotations
+    // Getters
     @PropertyName("name")
     public String getName() { return name; }
+
+    @PropertyName("description")
+    public String getDescription() { return description; }
 
     @PropertyName("primary_muscles")
     public List<String> getPrimaryMuscles() { return primaryMuscles; }
 
-    public String getDescription() {
-        return description;
-    }
+    @PropertyName("equipment")
+    public List<String> getEquipment() { return equipment; }
+
+    @PropertyName("sets")
+    public String getSets() { return sets; }
+
+    @PropertyName("reps")
+    public String getReps() { return reps; }
+
+
+
 
     public void setDescription(String description) {
         this.description = description;
@@ -49,25 +60,16 @@ public class Exercise {
         this.primaryMuscles = primaryMuscles;
     }
 
-    public List<String> getEquipment() {
-        return equipment;
-    }
 
     public void setEquipment(List<String> equipment) {
         this.equipment = equipment;
     }
 
-    public String getSets() {
-        return sets;
-    }
 
     public void setSets(String sets) {
         this.sets = sets;
     }
 
-    public String getReps() {
-        return reps;
-    }
 
     public void setReps(String reps) {
         this.reps = reps;

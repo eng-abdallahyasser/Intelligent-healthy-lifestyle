@@ -4,6 +4,7 @@
     <color name="primary_color">#2196F3</color>
     <color name="primary_dark">#1976D2</color>
     <color name="accent_color">#FF4081</color>
+    <color name="slate_grey_color">#708090</color>
 
     <!-- Optional additional colors -->
     <color name="background">#FFFFFF</color>

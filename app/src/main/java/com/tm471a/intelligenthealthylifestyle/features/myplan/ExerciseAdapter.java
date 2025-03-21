@@ -1,25 +1,30 @@
-package com.tm471a.intelligenthealthylifestyle.features.workout;
+package com.tm471a.intelligenthealthylifestyle.features.myplan;
 
 import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tm471a.intelligenthealthylifestyle.R;
 import com.tm471a.intelligenthealthylifestyle.data.model.Exercise;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHolder> {
     private List<Exercise> exerciseList;
+    private List<Boolean> exerciseCompleted;
 
-    public ExerciseAdapter(List<Exercise> exerciseList) {
+    public ExerciseAdapter(List<Exercise> exerciseList, List<Boolean> exerciseCompleted) {
         this.exerciseList = exerciseList;
+        this.exerciseCompleted = exerciseCompleted;
     }
 
     @NonNull
@@ -37,9 +42,23 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
 
         holder.tvExerciseName.setText(exercise.getName());
         holder.tvExerciseDescription.setText(exercise.getDescription());
-        holder.floatingCheckedButton.setVisibility(View.GONE);
-        holder.tvPrimaryMuscles.setText("Primary Muscles: " + String.join(", ", exercise.getPrimaryMuscles()));
-        holder.tvEquipment.setText("Equipment: " + String.join(", ", exercise.getEquipment()));
+
+        // Handle potential null values
+        String primaryMuscles = (exercise.getPrimaryMuscles() != null) ? String.join(", ", exercise.getPrimaryMuscles()) : "N/A";
+        String equipment = (exercise.getEquipment() != null) ? String.join(", ", exercise.getEquipment()) : "N/A";
+
+        holder.fabCompleted.setOnClickListener(v -> {
+            exerciseCompleted.set(position, !exerciseCompleted.get(position));
+            notifyItemChanged(position);
+        });
+
+        if (exerciseCompleted.get(position)) {
+            holder.fabCompleted.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.getContext(),R.color.primary_color)));
+        } else {
+            holder.fabCompleted.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.getContext(),R.color.slate_grey_color)));
+        }
+        holder.tvPrimaryMuscles.setText("Primary Muscles: " + primaryMuscles);
+        holder.tvEquipment.setText("Equipment: " + equipment);
         holder.tvSetsReps.setText("Sets: " + exercise.getSets() + " | Reps: " + exercise.getReps());
     }
 
@@ -50,7 +69,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvExerciseName, tvExerciseDescription, tvPrimaryMuscles, tvEquipment, tvSetsReps;
-        FloatingActionButton floatingCheckedButton;
+        FloatingActionButton fabCompleted;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,7 +78,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
             tvPrimaryMuscles = itemView.findViewById(R.id.tvPrimaryMuscles);
             tvEquipment = itemView.findViewById(R.id.tvEquipment);
             tvSetsReps = itemView.findViewById(R.id.tvSetsReps);
-            floatingCheckedButton=itemView.findViewById(R.id.floatingCheckedButton);
+            fabCompleted = itemView.findViewById(R.id.floatingCheckedButton);
         }
     }
 }

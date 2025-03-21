@@ -6,13 +6,11 @@ import android.annotation.SuppressLint;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.gson.Gson;
 import com.tm471a.intelligenthealthylifestyle.data.model.User;
 import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutPlan;
 
@@ -103,13 +101,35 @@ public class WorkoutRepository {
     }
 
     public void subscribeToWorkoutPlan(WorkoutPlan workoutPlan) {
-        db.collection("Users").document(userData.getUid())
+        String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        db.collection("Users").document(uid)
                 .collection("workout_plans")
                 .document("subscribed_workout_plan")
                 .set(workoutPlan)
                 .addOnSuccessListener(aVoid -> Log.d("Firestore", "Successfully subscribed!"))
                 .addOnFailureListener(e -> Log.e("Firestore", "Error subscribing", e));
         ;
+    }
+
+    public WorkoutPlan getSubscribedWorkoutPlan(OnWorkoutPlanFetchedListener listener) {
+        String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        db.collection("Users").document(uid)
+                .collection("workout_plans")
+                .document("subscribed_workout_plan")
+                .addSnapshotListener((value, error) -> {
+                    if (error != null || value == null || !value.exists()) {
+                        listener.onError("Error fetching workout plan");
+                        return;
+                    }
+
+                    WorkoutPlan plan = value.toObject(WorkoutPlan.class);
+                    listener.onSuccess(plan);
+                });
+        return null;
+    }
+    public interface OnWorkoutPlanFetchedListener {
+        void onSuccess(WorkoutPlan workoutPlan);
+        void onError(String errorMessage);
     }
 
     public interface ResponseCallback {

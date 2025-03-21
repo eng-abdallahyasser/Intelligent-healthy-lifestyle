@@ -22,16 +22,19 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.tm471a.intelligenthealthylifestyle.R;
 import com.tm471a.intelligenthealthylifestyle.data.model.MeasurementLog;
 import com.tm471a.intelligenthealthylifestyle.data.model.WeightLog;
 import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutLog;
 import com.tm471a.intelligenthealthylifestyle.databinding.FragmentProgressBinding;
-import com.tm471a.intelligenthealthylifestyle.utils.DateAxisFormatter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ProgressFragment extends Fragment {
 
@@ -159,10 +162,12 @@ public class ProgressFragment extends Fragment {
     }
     private void setupDateAxis(XAxis xAxis) {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
+        xAxis.setGranularity(86400f); // 1 day in seconds
         xAxis.setValueFormatter(new DateAxisFormatter());
         xAxis.setLabelRotationAngle(-45);
+        xAxis.setDrawGridLines(false);
     }
+
 
     private void setupObservers() {
         viewModel.getWeightLogs().observe(getViewLifecycleOwner(), this::updateWeightChart);
@@ -173,8 +178,8 @@ public class ProgressFragment extends Fragment {
     private void updateWeightChart(List<WeightLog> weightLogs) {
         List<Entry> entries = new ArrayList<>();
         for (WeightLog log : weightLogs) {
-            float timestamp = (float) log.getDate().toDate().getTime()-getBaseTimestamp();
-            entries.add(new Entry(timestamp, (float) log.getWeight()));
+            float timestamp = (float) log.getDate().toDate().getTime();
+            entries.add(new Entry(log.getDate().toDate().getTime(), (float) log.getWeight()));
         }
 
         LineDataSet dataSet = new LineDataSet(entries, "Weight (kg)");
@@ -187,8 +192,8 @@ public class ProgressFragment extends Fragment {
     private void updateWorkoutChart(List<WorkoutLog> workoutLogs) {
         List<BarEntry> entries = new ArrayList<>();
         for (WorkoutLog log: workoutLogs) {
-            float timestamp = (float) log.getDate().toDate().getTime()-getBaseTimestamp();
-            entries.add(new BarEntry(timestamp, log.getCount()));
+            float timestamp = (float) log.getDate().toDate().getTime();
+            entries.add(new BarEntry(log.getDate().toDate().getTime(), log.getCount()));
         }
 
         BarDataSet dataSet = new BarDataSet(entries, "Workouts");
@@ -207,11 +212,11 @@ public class ProgressFragment extends Fragment {
         List<Entry> hipsEntries = new ArrayList<>();
 
         for (MeasurementLog log: measurementLogs) {
-            float timestamp = (float) log.getDate().toDate().getTime()-getBaseTimestamp();
+            float timestamp = (float) log.getDate().toDate().getTime();
 
-            chestEntries.add(new Entry(timestamp,(float) log.getChest()));
-            waistEntries.add(new Entry(timestamp,(float) log.getWaist()));
-            hipsEntries.add(new Entry(timestamp,(float) log.getHips()));
+            chestEntries.add(new Entry(log.getDate().toDate().getTime(),(float) log.getChest()));
+            waistEntries.add(new Entry(log.getDate().toDate().getTime(),(float) log.getWaist()));
+            hipsEntries.add(new Entry(log.getDate().toDate().getTime(),(float) log.getHips()));
         }
 
         LineDataSet chestDataSet = new LineDataSet(chestEntries, "Chest");
@@ -239,5 +244,14 @@ public class ProgressFragment extends Fragment {
         calendar.set(2025, Calendar.MARCH, 1, 0, 0, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTimeInMillis();
+    }
+    public class DateAxisFormatter extends ValueFormatter {
+        private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM", Locale.getDefault());
+
+        @Override
+        public String getFormattedValue(float value) {
+            long millis = (long) value;
+            return dateFormat.format(new Date(millis));
+        }
     }
 }
