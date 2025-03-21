@@ -6,12 +6,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private NavController navController;
     private FirebaseAuth auth;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +60,50 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up Bottom Navigation
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_plan,
                 R.id.nav_workout,
                 R.id.nav_nutrition,
                 R.id.nav_progress,
-                R.id.nav_assistant,
-//                R.id.nav_plan,
-                R.id.nav_profile
+                R.id.nav_assistant
         ).build();
 
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.bottomNav, navController);
     }
 
+//    private void setupNavigationDrawer() {
+//        drawerLayout = binding.drawerLayout;
+//        navigationView = binding.navView;
+//        navigationView.setNavigationItemSelectedListener(item -> {
+//            navController.navigate(item.getItemId());
+//            drawerLayout.closeDrawer(GravityCompat.START);
+//            return true;
+//        });
+//
+//        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+//        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+//                R.id.nav_workout,
+//                R.id.nav_nutrition,
+//                R.id.nav_progress,
+//                R.id.nav_plan,
+//                R.id.nav_assistant,
+//                R.id.nav_profile)
+//                .setOpenableLayout(drawerLayout)
+//                .build();
+//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+//        NavigationUI.setupWithNavController(navigationView, navController);
+//
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, binding.appBarMain.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawerLayout.addDrawerListener(toggle);
+//        toggle.syncState();
+//
+//        navigationView.setNavigationItemSelectedListener(item -> {
+//            navController.navigate(item.getItemId());
+//            drawerLayout.closeDrawer(GravityCompat.START);
+//            return true;
+//        });
+//
+//    }
     private void redirectToLauncher() {
         startActivity(new Intent(this, LauncherActivity.class));
         finish();
@@ -80,6 +119,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_logout) {
             logoutUser();
+            return true;
+        }
+        if(item.getItemId() == R.id.menu_profile){
+            navController.navigate(R.id.nav_profile);
             return true;
         }
         return super.onOptionsItemSelected(item);

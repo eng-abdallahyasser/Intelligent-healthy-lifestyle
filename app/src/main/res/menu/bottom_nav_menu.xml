@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/nav_plan"
+        android:icon="@drawable/ic_plan"
+        android:title="My Plan" />
+    <item
         android:id="@+id/nav_workout"
         android:icon="@drawable/ic_workout"
         android:title="Workout" />
-<!--    <item-->
-<!--        android:id="@+id/nav_plan"-->
-<!--        android:icon="@drawable/ic_my_plan"-->
-<!--        android:title="My Plan" />-->
     <item
         android:id="@+id/nav_nutrition"
         android:icon="@drawable/ic_nutrition"
@@ -20,8 +20,4 @@
         android:id="@+id/nav_assistant"
         android:icon="@drawable/ic_assistant"
         android:title="Assistant" />
-    <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_profile"
-        android:title="Profile" />
 </menu>
