@@ -33,7 +33,7 @@ public class WorkoutViewModel extends ViewModel {
     }
 
     public void generateWorkoutPlan() {
-        statusMessage.postValue("Loading...");
+        statusMessage.postValue("Generating Suggested Workout Plan For You...");
         repository.generateWorkoutPlan(new WorkoutRepository.ResponseCallback() {
             @Override
             public void onResponse(String response) {
@@ -67,7 +67,7 @@ public class WorkoutViewModel extends ViewModel {
         });
     }
     public void initFourWorkoutPlan() {
-        statusMessage.postValue("Loading...");
+        statusMessage.postValue("Generating Suggested Workout Plan For You...");
         repository.initFourWorkoutPlan(new WorkoutRepository.ResponseCallback() {
             @Override
             public void onResponse(String response) {

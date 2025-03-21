@@ -59,7 +59,7 @@ public class WorkoutDetailFragment extends Fragment {
             binding.tvDifficulty.setText("Difficulty: " + workoutPlan.getDifficulty());
 
             // Setup RecyclerView for Exercises
-            ExerciseAdapter adapter = new ExerciseAdapter(workoutPlan.getWorkoutDayList().get(0).getExercises());
+            WorkoutDayAdapter adapter = new WorkoutDayAdapter(workoutPlan.getWorkoutDayList());
             binding.rvExercises.setLayoutManager(new LinearLayoutManager(getContext()));
             binding.rvExercises.setAdapter(adapter);
 

@@ -47,7 +47,7 @@ public class WorkoutFragment extends Fragment {
                 binding.circularProgress.setVisibility(View.VISIBLE);
                 binding.tvMessage.setVisibility(View.VISIBLE);
             }
-            else if(massage=="Loading..."){
+            else if(massage=="Generating Suggested Workout Plan For You..."){
                 binding.statusCardView.setVisibility(View.VISIBLE);
                 binding.circularProgress.setVisibility(View.VISIBLE);
                 binding.tvMessage.setVisibility(View.VISIBLE);

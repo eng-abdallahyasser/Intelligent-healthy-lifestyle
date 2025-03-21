@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 
 import okhttp3.Call;
@@ -41,7 +42,7 @@ public class WorkoutRepository {
     private final OkHttpClient client;
     final MutableLiveData<Boolean> isInitialized = new MutableLiveData<>(false);
     private String geminiApiKey;
-    private User userData= new User();
+    private User userData;
 
     public WorkoutRepository() {
         loadUserData();
@@ -49,6 +50,9 @@ public class WorkoutRepository {
 
         this.client = new OkHttpClient.Builder()
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                .connectTimeout(60, TimeUnit.SECONDS)  // Increase connection timeout
+                .readTimeout(60, TimeUnit.SECONDS)     // Increase read timeout
+                .writeTimeout(60, TimeUnit.SECONDS)    // Increase write timeout
                 .build();
     }
 

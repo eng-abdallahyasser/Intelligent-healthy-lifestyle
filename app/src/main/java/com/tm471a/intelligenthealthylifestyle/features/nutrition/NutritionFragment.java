@@ -61,13 +61,14 @@ public class NutritionFragment extends Fragment {
                 binding.circularProgress.setVisibility(View.VISIBLE);
                 binding.tvMessage.setVisibility(View.VISIBLE);
             }
-            else if(status=="Loading..."){
+            else if(status=="Generating Nutrition Advice For You..."){
                 binding.statusCardView.setVisibility(View.VISIBLE);
                 binding.circularProgress.setVisibility(View.VISIBLE);
                 binding.tvMessage.setVisibility(View.VISIBLE);
             }
             else if(status=="done"){
                 binding.statusCardView.setVisibility(View.GONE);
+                binding.nutritionContentLayout.setVisibility(View.VISIBLE);
             }
             else {
                 binding.tvMessage.setVisibility(View.VISIBLE);

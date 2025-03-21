@@ -33,7 +33,7 @@ public class NutritionRepository {
     private final MutableLiveData<Boolean> isInitialized = new MutableLiveData<>(false);
     private final String BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
     private String geminiApiKey;
-    private User userData= new User();
+    private User userData;
 
     public MutableLiveData<Boolean> getIsInitialized() {
         return isInitialized;

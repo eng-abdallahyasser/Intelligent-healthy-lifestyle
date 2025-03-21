@@ -23,7 +23,7 @@ public class NutritionViewModel extends ViewModel {
     }
 
     public void generateNutritionAdvice() {
-        statusMessage.postValue("Loading...");
+        statusMessage.postValue("Generating Nutrition Advice For You...");
 
         repository.generateNutritionAdvice( new NutritionRepository.ResponseCallback() {
             @Override
