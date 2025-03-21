@@ -28,7 +28,7 @@ public class AssistantRepository {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     // Add LiveData to track readiness
     private final MutableLiveData<Boolean> isInitialized = new MutableLiveData<>(false);
-    private User userData= new User();
+    private User userData;
     private final Gson gson;
     private String geminiApiKey;
 

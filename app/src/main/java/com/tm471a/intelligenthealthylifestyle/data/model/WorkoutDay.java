@@ -1,16 +1,33 @@
 package com.tm471a.intelligenthealthylifestyle.data.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WorkoutDay {
     private String day;
     private List<Exercise> exercises;
 
+    private List<Boolean> exerciseCompleted;
+
     public WorkoutDay() {
     }
     public WorkoutDay(String day, List<Exercise> exercises) {
         this.day = day;
         this.exercises = exercises;
+    }
+
+    public void initExerciseCompleted() {
+        exerciseCompleted = new ArrayList<>();
+        for (int i = 0; i < exercises.size(); i++) {
+            exerciseCompleted.add(false);
+        }
+    }
+    public List<Boolean> getExerciseCompleted() {
+        return exerciseCompleted;
+    }
+
+    public void setExerciseCompleted(List<Boolean> exerciseCompleted) {
+        this.exerciseCompleted = exerciseCompleted;
     }
 
     public String getDay() {

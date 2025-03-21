@@ -3,6 +3,7 @@ package com.tm471a.intelligenthealthylifestyle.data.repository;
 
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -100,6 +101,17 @@ public class WorkoutRepository {
 
         return workoutPlans;
     }
+
+    public void subscribeToWorkoutPlan(WorkoutPlan workoutPlan) {
+        db.collection("Users").document(userData.getUid())
+                .collection("workout_plans")
+                .document("subscribed_workout_plan")
+                .set(workoutPlan)
+                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Successfully subscribed!"))
+                .addOnFailureListener(e -> Log.e("Firestore", "Error subscribing", e));
+        ;
+    }
+
     public interface ResponseCallback {
         void onResponse(String response);
         void onError(String error);

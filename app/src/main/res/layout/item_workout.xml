@@ -32,6 +32,24 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"/>
 
+        <TextView
+            android:id="@+id/tv_days_per_week"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tv_goal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"/>
+        <TextView
+            android:id="@+id/tv_session_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"/>
+
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

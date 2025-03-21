@@ -42,10 +42,6 @@ public class MainActivity extends AppCompatActivity {
             redirectToLauncher();
             return;
         }
-//        addSampleWorkoutPlan();
-//        addSampleWorkoutPlan();
-//        addSampleWorkoutPlan();
-//        addSampleWorkoutPlan();
 
         setupNavigation();
     }
@@ -61,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_nutrition,
                 R.id.nav_progress,
                 R.id.nav_assistant,
+//                R.id.nav_plan,
                 R.id.nav_profile
         ).build();
 
@@ -98,34 +95,4 @@ public class MainActivity extends AppCompatActivity {
         return navController.navigateUp() || super.onSupportNavigateUp();
     }
 
-    public void addSampleWorkoutPlan() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) return;
-
-        // Create sample exercise
-        Map<String, Object> exercise1 = new HashMap<>();
-        exercise1.put("name", "Push-ups");
-        exercise1.put("primary_muscles", Arrays.asList("Chest", "Triceps"));
-        exercise1.put("equipment", Collections.singletonList("None"));
-        exercise1.put("sets", 3);
-        exercise1.put("reps", 12);
-
-        // Create workout plan document
-        Map<String, Object> workoutPlan = new HashMap<>();
-        workoutPlan.put("plan_name", "Beginner Strength");
-        workoutPlan.put("duration", "4 Weeks");
-        workoutPlan.put("difficulty", "Beginner");
-        workoutPlan.put("exercises", Arrays.asList(exercise1));
-
-        // Add to Firestore
-        FirebaseFirestore.getInstance()
-                .collection("Users")
-                .document(user.getUid())
-                .collection("workout_plans")
-                .add(workoutPlan)
-                .addOnSuccessListener(documentReference ->
-                        Log.d("FIREBASE", "Added sample workout plan"))
-                .addOnFailureListener(e ->
-                        Log.e("FIREBASE", "Error adding plan", e));
-    }
 }

@@ -34,6 +34,36 @@ public class WorkoutPlan implements Serializable {
         this.workoutDayList = exercises;
         this.difficulty = difficulty;
     }
+    public WorkoutPlan initExerciseCompleted() {
+        for (WorkoutDay workoutDay : workoutDayList) {
+            workoutDay.initExerciseCompleted();
+        }
+        return this;
+    }
+
+    public String getGoal() {
+        return goal;
+    }
+
+    public void setGoal(String goal) {
+        this.goal = goal;
+    }
+
+    public String getDaysPerWeek() {
+        return daysPerWeek;
+    }
+
+    public void setDaysPerWeek(String daysPerWeek) {
+        this.daysPerWeek = daysPerWeek;
+    }
+
+    public String getSessionDuration() {
+        return sessionDuration;
+    }
+
+    public void setSessionDuration(String sessionDuration) {
+        this.sessionDuration = sessionDuration;
+    }
 
     @PropertyName("plan_name")
     public String getPlanName() { return planName; }

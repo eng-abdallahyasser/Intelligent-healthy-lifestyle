@@ -12,32 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutPlan;
+import com.tm471a.intelligenthealthylifestyle.data.repository.WorkoutRepository;
 import com.tm471a.intelligenthealthylifestyle.databinding.FragmentWorkoutDetailBinding;
 
 
 public class WorkoutDetailFragment extends Fragment {
     private FragmentWorkoutDetailBinding binding;
+    private WorkoutRepository repository = new WorkoutRepository();
     private WorkoutPlan workoutPlan;
-
-    public WorkoutDetailFragment() {
-        // Required empty public constructor
-    }
-
-//    public static WorkoutDetailFragment newInstance(String param1, String param2) {
-//        WorkoutDetailFragment fragment = new WorkoutDetailFragment();
-//        Bundle args = new Bundle();
-//
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-//
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//
-//        }
-//    }
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -49,19 +31,25 @@ public class WorkoutDetailFragment extends Fragment {
         // Retrieve the workout plan from arguments
         if (getArguments() != null) {
             workoutPlan = (WorkoutPlan) getArguments().getSerializable("workoutPlan");
-
             // Populate UI with workout details
             assert workoutPlan != null;
+            workoutPlan.initExerciseCompleted();
 
             Log.d("WorkoutDetailFragment", "onCreateView: getArguments() != null \n workoutPlan: " + workoutPlan.getPlanName() + "");
             binding.tvPlanName.setText(workoutPlan.getPlanName());
             binding.tvDuration.setText("Duration: " + workoutPlan.getDuration());
             binding.tvDifficulty.setText("Difficulty: " + workoutPlan.getDifficulty());
+            binding.tvGoal.setText("Goal: " + workoutPlan.getGoal());
+            binding.tvDaysPerWeek.setText("Days Per Week: " + workoutPlan.getDaysPerWeek() + "days");
+            binding.tvSessionDuration.setText("Session Duration: " + workoutPlan.getSessionDuration());
 
             // Setup RecyclerView for Exercises
             WorkoutDayAdapter adapter = new WorkoutDayAdapter(workoutPlan.getWorkoutDayList());
             binding.rvExercises.setLayoutManager(new LinearLayoutManager(getContext()));
             binding.rvExercises.setAdapter(adapter);
+            binding.btnSubscribe.setOnClickListener(v -> {
+                repository.subscribeToWorkoutPlan(workoutPlan);
+            });
 
         }
         return binding.getRoot();
