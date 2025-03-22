@@ -9,9 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.tm471a.intelligenthealthylifestyle.data.model.User;
+import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutDay;
 import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutPlan;
 
 
@@ -109,6 +111,29 @@ public class WorkoutRepository {
                 .addOnSuccessListener(aVoid -> Log.d("Firestore", "Successfully subscribed!"))
                 .addOnFailureListener(e -> Log.e("Firestore", "Error subscribing", e));
         ;
+    }
+    public void updateExerciseCompletion(int position, WorkoutDay updatedWorkoutDay) {
+        String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
+        DocumentReference docRef = db.collection("Users").document(uid)
+                .collection("workout_plans").document("subscribed_workout_plan");
+
+        docRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                // Convert Firestore document to a List
+                List<WorkoutDay> workoutDayList = documentSnapshot.toObject(WorkoutPlan.class).getWorkoutDayList();
+
+                if (workoutDayList != null && position < workoutDayList.size()) {
+                    // Update the specific item
+                    workoutDayList.set(position, updatedWorkoutDay);
+
+                    // Push the modified list back to Firestore
+                    docRef.update("workoutDayList", workoutDayList)
+                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "Workout day updated successfully"))
+                            .addOnFailureListener(e -> Log.e("Firestore", "Error updating workout day", e));
+                }
+            }
+        }).addOnFailureListener(e -> Log.e("Firestore", "Error fetching workout plan", e));
     }
 
     public WorkoutPlan getSubscribedWorkoutPlan(OnWorkoutPlanFetchedListener listener) {

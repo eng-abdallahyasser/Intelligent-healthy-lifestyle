@@ -39,6 +39,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
         holder.tvExerciseName.setText(exercise.getName());
         holder.tvExerciseDescription.setText(exercise.getDescription());
         holder.ibDone.setVisibility(View.GONE);
+        if(exercise.getPrimaryMuscles()!=null)
         holder.tvPrimaryMuscles.setText("Primary Muscles: " + String.join(", ", exercise.getPrimaryMuscles()));
         holder.tvEquipment.setText("Equipment: " + String.join(", ", exercise.getEquipment()));
         holder.tvSetsReps.setText("Sets: " + exercise.getSets() + " | Reps: " + exercise.getReps());

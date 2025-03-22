@@ -16,9 +16,11 @@ import java.util.List;
 
 public class WorkoutDayAdapter extends RecyclerView.Adapter<WorkoutDayAdapter.ViewHolder> {
     private final List<WorkoutDay> workoutDays;
+    private final MyPlanViewModel viewModel;
 
-    public WorkoutDayAdapter(List<WorkoutDay> suggestions) {
+    public WorkoutDayAdapter(List<WorkoutDay> suggestions, MyPlanViewModel viewModel) {
         this.workoutDays = suggestions;
+        this.viewModel = viewModel;
     }
 
     @NonNull
@@ -36,7 +38,7 @@ public class WorkoutDayAdapter extends RecyclerView.Adapter<WorkoutDayAdapter.Vi
 
         holder.textViewDay.setText(workoutDay.getDay());
 
-        ExerciseAdapter exerciseAdapter = new ExerciseAdapter(workoutDay.getExercises(), workoutDay.getExerciseCompleted());
+        ExerciseAdapter exerciseAdapter = new ExerciseAdapter(workoutDay,viewModel);
         holder.exerciseRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.exerciseRecyclerView.setAdapter(exerciseAdapter);
     }

@@ -37,7 +37,7 @@ public class MyPlanFragment extends Fragment {
                 binding.tvDaysPerWeek.setText("Days Per Week: " + workoutPlan.getDaysPerWeek() + "days");
                 binding.tvSessionDuration.setText("Session Duration: " + workoutPlan.getSessionDuration());
 
-                WorkoutDayAdapter workoutDayAdapter = new WorkoutDayAdapter(workoutPlan.getWorkoutDayList());
+                WorkoutDayAdapter workoutDayAdapter = new WorkoutDayAdapter(workoutPlan.getWorkoutDayList(), viewModel);
                 binding.rvWorkoutDays.setLayoutManager(new LinearLayoutManager(getContext()));
                 binding.rvWorkoutDays.setAdapter(workoutDayAdapter);
             }

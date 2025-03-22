@@ -18,17 +18,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tm471a.intelligenthealthylifestyle.R;
 import com.tm471a.intelligenthealthylifestyle.data.model.Exercise;
+import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutDay;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHolder> {
-    private List<Exercise> exerciseList;
-    private List<Boolean> exerciseCompleted;
+    private MyPlanViewModel viewModel;
+    private WorkoutDay workoutDay;
 
-    public ExerciseAdapter(List<Exercise> exerciseList, List<Boolean> exerciseCompleted) {
-        this.exerciseList = exerciseList;
-        this.exerciseCompleted = exerciseCompleted;
+    public ExerciseAdapter(WorkoutDay workoutDay, MyPlanViewModel viewModel) {
+        this.workoutDay=workoutDay;
+        this.viewModel = viewModel;
     }
 
     @NonNull
@@ -42,7 +43,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Exercise exercise = exerciseList.get(position);
+        Exercise exercise = workoutDay.getExercises().get(position);
 
         holder.tvExerciseName.setText(exercise.getName());
         holder.tvExerciseDescription.setText(exercise.getDescription());
@@ -52,11 +53,14 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
         String equipment = (exercise.getEquipment() != null) ? String.join(", ", exercise.getEquipment()) : "N/A";
 
         holder.ibDone.setOnClickListener(v -> {
-            exerciseCompleted.set(position, !exerciseCompleted.get(position));
+            workoutDay.getExerciseCompleted().set(position, !workoutDay.getExerciseCompleted().get(position));
+//            if (viewModel != null) {
+//                viewModel.updateExerciseCompletion(position, workoutDay);
+//            }
             notifyItemChanged(position);
         });
 
-        if (exerciseCompleted.get(position)) {
+        if (workoutDay.getExerciseCompleted().get(position)) {
             holder.ibDone.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.getContext(), R.color.primary_color)));
 
             GradientDrawable borderDrawable = new GradientDrawable();
@@ -81,7 +85,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return exerciseList.size();
+        return workoutDay.getExercises().size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

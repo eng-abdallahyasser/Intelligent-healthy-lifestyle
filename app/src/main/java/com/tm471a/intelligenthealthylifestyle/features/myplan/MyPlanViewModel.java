@@ -5,8 +5,14 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.tm471a.intelligenthealthylifestyle.data.model.Exercise;
+import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutDay;
 import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutPlan;
 import com.tm471a.intelligenthealthylifestyle.data.repository.WorkoutRepository;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MyPlanViewModel extends ViewModel {
 
@@ -33,13 +39,30 @@ public class MyPlanViewModel extends ViewModel {
                         }
                         subscribedPlan.postValue(workoutPlan);
                     }
-                    @Override
                     public void onError(String errorMessage) {
-                        // Handle error
                         Log.e("MyPlanViewModel", "Error fetching workout plan: " + errorMessage);
+
+                        // Create a placeholder workout plan
+                        List<Exercise> placeholderExercises = new ArrayList<>();
+
+                        List<WorkoutDay> placeholderDays = new ArrayList<>();
+                        placeholderDays.add(new WorkoutDay("", placeholderExercises));
+
+                        WorkoutPlan placeholderPlan = new WorkoutPlan(
+                                "please subscribe to a workout plan",
+                                "1 week",
+                                placeholderDays,
+                                "Beginner"
+                        );
+
+                        // Set the placeholder plan as the default value
+                        subscribedPlan.postValue(placeholderPlan.initExerciseCompleted());
                     }
                 }
         );
     }
 
+    public void updateExerciseCompletion(int position, WorkoutDay workoutDay) {
+        workoutRepository.updateExerciseCompletion(position, workoutDay);
+    }
 }
