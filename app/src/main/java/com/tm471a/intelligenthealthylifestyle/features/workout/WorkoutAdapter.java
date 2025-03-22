@@ -56,7 +56,6 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
     public int getItemCount() {
         return workoutPlans.size();
     }
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView planName, duration, difficulty, daysPerWeek, goal, sessionDuration;
 

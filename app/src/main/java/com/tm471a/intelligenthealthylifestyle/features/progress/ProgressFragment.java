@@ -195,13 +195,10 @@ public class ProgressFragment extends Fragment {
             float timestamp = (float) log.getDate().toDate().getTime();
             entries.add(new BarEntry(log.getDate().toDate().getTime(), log.getCount()));
         }
-
         BarDataSet dataSet = new BarDataSet(entries, "Workouts");
         dataSet.setColor(ContextCompat.getColor(getContext(), R.color.primary_color));
-
         BarData barData = new BarData(dataSet);
         barData.setBarWidth(3600000);
-
         binding.workoutChart.setData(barData);
         binding.workoutChart.invalidate();
     }

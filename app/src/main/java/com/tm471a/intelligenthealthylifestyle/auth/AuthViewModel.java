@@ -16,7 +16,6 @@ import java.util.List;
 public class AuthViewModel extends AndroidViewModel {
     private final AuthRepository authRepository;
     private final MutableLiveData<Resource<User>> userLiveData = new MutableLiveData<>();
-
     public AuthViewModel(Application application) {
         super(application);
         authRepository = new AuthRepository();

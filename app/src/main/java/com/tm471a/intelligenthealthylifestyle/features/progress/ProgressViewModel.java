@@ -21,7 +21,6 @@ public class ProgressViewModel extends ViewModel {
     public void saveBodyMeasurement(float chest, float waist, float hips) {
         repo.logMeasurement(new MeasurementLog(chest, waist, hips));
     }
-
     public LiveData<List<WeightLog>> getWeightLogs() {
         return repo.getWeightLogs();
     }

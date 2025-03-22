@@ -37,7 +37,6 @@ public class AssistantFragment extends Fragment {
         return binding.getRoot();
 
     }
-
     private void setupChat() {
         binding.rvMessages.setAdapter(adapter);
         binding.rvMessages.setLayoutManager(new LinearLayoutManager(getContext()));

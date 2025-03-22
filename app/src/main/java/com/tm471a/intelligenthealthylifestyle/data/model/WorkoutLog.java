@@ -15,7 +15,6 @@ public class WorkoutLog {
         this.count = count;
         this.date = Timestamp.now();
     }
-
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("count", count);

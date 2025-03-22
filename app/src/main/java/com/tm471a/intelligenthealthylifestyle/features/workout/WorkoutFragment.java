@@ -67,7 +67,6 @@ public class WorkoutFragment extends Fragment {
             viewModel.generateWorkoutPlan();
         });
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

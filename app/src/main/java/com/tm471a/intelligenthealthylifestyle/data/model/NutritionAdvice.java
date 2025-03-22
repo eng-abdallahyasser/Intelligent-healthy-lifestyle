@@ -22,7 +22,6 @@ public class NutritionAdvice {
     private String seoKeywords;
 
     public NutritionAdvice(){
-
     }
 
     public String getExerciseName() {

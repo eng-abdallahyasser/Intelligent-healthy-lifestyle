@@ -25,7 +25,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-
         setupObservers();
         setupClickListeners();
     }

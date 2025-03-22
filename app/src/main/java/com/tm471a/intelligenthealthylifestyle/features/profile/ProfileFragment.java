@@ -40,7 +40,6 @@ public class ProfileFragment extends Fragment {
         });
         setupForm();
         setupObservers();
-
         return binding.getRoot();
     }
 

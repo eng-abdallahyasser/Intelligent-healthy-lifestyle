@@ -38,7 +38,6 @@ public class NutritionRepository {
     public MutableLiveData<Boolean> getIsInitialized() {
         return isInitialized;
     }
-
     public NutritionRepository() {
         this.client = new OkHttpClient.Builder()
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))

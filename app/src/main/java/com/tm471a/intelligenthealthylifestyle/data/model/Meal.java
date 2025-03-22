@@ -9,7 +9,6 @@ public class Meal {
 
     public Meal() {
     }
-
     public int getCalories() {
         return calories;
     }

@@ -121,7 +121,6 @@ public class WorkoutRepository {
                         listener.onError("Error fetching workout plan");
                         return;
                     }
-
                     WorkoutPlan plan = value.toObject(WorkoutPlan.class);
                     listener.onSuccess(plan);
                 });

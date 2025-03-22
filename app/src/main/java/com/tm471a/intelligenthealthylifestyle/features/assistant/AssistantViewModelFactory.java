@@ -12,7 +12,6 @@ public class AssistantViewModelFactory implements ViewModelProvider.Factory {
     public AssistantViewModelFactory(Application application) {
         this.application = application;
     }
-
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

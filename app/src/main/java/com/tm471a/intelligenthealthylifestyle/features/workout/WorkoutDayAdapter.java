@@ -43,7 +43,6 @@ public class WorkoutDayAdapter extends RecyclerView.Adapter<WorkoutDayAdapter.Vi
         holder.exerciseRecyclerView.setAdapter(mealAdapter);
     }
 
-
     @Override
     public int getItemCount() {
         return suggestions.size();

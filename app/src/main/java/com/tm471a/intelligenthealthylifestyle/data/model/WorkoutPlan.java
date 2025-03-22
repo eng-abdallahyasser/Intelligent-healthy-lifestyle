@@ -21,7 +21,6 @@ public class WorkoutPlan implements Serializable {
 
     @SerializedName("workout_day_list")
     private List<WorkoutDay> workoutDayList;
-
     @SerializedName("difficulty")
     private String difficulty;
 

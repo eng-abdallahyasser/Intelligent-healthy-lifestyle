@@ -52,7 +52,6 @@ public class NutritionFragment extends Fragment {
 
             MealSuggestionAdapter mealSuggestionAdapter=new MealSuggestionAdapter(nutritionAdvice.getMealSuggestions());
             binding.rvMeals.setAdapter(mealSuggestionAdapter);
-
         } );
         viewModel.getStatusMessage().observe(getViewLifecycleOwner(),status->{
             binding.tvMessage.setText(status);

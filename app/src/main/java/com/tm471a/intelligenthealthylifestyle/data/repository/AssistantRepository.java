@@ -37,7 +37,6 @@ public class AssistantRepository {
         void onResponse(String response);
         void onError(String error);
     }
-
     public AssistantRepository() {
         loadUserData();
         loadApiKey();

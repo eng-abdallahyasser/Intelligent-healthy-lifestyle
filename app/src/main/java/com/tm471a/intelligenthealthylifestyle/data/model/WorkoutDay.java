@@ -15,7 +15,6 @@ public class WorkoutDay {
         this.day = day;
         this.exercises = exercises;
     }
-
     public void initExerciseCompleted() {
         exerciseCompleted = new ArrayList<>();
         for (int i = 0; i < exercises.size(); i++) {

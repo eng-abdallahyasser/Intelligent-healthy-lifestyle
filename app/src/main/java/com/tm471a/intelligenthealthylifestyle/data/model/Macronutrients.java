@@ -7,7 +7,6 @@ public class Macronutrients {
 
     public Macronutrients(){
     }
-
     public String getCarbohydrates() {
         return carbohydrates;
     }

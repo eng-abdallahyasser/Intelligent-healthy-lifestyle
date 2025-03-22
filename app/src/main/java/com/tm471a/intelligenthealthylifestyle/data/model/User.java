@@ -16,7 +16,6 @@ public class User {
     private int age;
     private List<String> fitnessGoals;
     private List<String> dietaryPreferences;
-
     @Override
     public String toString() {
         return "User{" +

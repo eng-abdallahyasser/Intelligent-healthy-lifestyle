@@ -13,7 +13,6 @@ public class Suggestion {
     public String getMeal() {
         return meal;
     }
-
     public void setMeal(String meal) {
         this.meal = meal;
     }

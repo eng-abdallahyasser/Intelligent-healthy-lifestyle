@@ -10,7 +10,6 @@ public class MeasurementLog {
     private double waist;
     private double hips;
     private Timestamp date;
-
     public MeasurementLog() {}  // Needed for Firestore
 
     public MeasurementLog(double chest, double waist, double hips) {

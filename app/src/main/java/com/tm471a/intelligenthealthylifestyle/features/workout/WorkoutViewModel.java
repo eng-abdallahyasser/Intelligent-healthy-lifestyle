@@ -74,7 +74,6 @@ public class WorkoutViewModel extends ViewModel {
                 try {
                     String cleanedJson = response.replaceAll("```json\n|```", "");
                     Type listType = new TypeToken<List<WorkoutPlan>>() {}.getType();
-
                     List<WorkoutPlan> initWorkoutPlans = gson.fromJson(cleanedJson, listType);
                     Log.d("WorkoutPlan", "Plan Name: " + initWorkoutPlans.get(0).getPlanName());
 

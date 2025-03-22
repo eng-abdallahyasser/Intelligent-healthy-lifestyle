@@ -43,7 +43,6 @@ public class MealSuggestionAdapter extends RecyclerView.Adapter<MealSuggestionAd
     public int getItemCount() {
         return suggestions.size();
     }
-
     static class CategoryViewHolder extends RecyclerView.ViewHolder {
         TextView categoryName;
         RecyclerView mealsRecyclerView;

@@ -22,7 +22,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     final private List<ChatMessage> messages = new ArrayList<>();
     private boolean isLoadingAdded = false;
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

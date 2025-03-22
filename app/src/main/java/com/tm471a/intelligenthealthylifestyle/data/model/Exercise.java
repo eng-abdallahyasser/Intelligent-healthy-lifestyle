@@ -35,7 +35,6 @@ public class Exercise {
 
     @PropertyName("primary_muscles")
     public List<String> getPrimaryMuscles() { return primaryMuscles; }
-
     @PropertyName("equipment")
     public List<String> getEquipment() { return equipment; }
 

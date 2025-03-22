@@ -2,9 +2,13 @@ package com.tm471a.intelligenthealthylifestyle.features.myplan;
 
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,15 +51,28 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
         String primaryMuscles = (exercise.getPrimaryMuscles() != null) ? String.join(", ", exercise.getPrimaryMuscles()) : "N/A";
         String equipment = (exercise.getEquipment() != null) ? String.join(", ", exercise.getEquipment()) : "N/A";
 
-        holder.fabCompleted.setOnClickListener(v -> {
+        holder.ibDone.setOnClickListener(v -> {
             exerciseCompleted.set(position, !exerciseCompleted.get(position));
             notifyItemChanged(position);
         });
 
         if (exerciseCompleted.get(position)) {
-            holder.fabCompleted.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.getContext(),R.color.primary_color)));
+            holder.ibDone.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.getContext(), R.color.primary_color)));
+
+            GradientDrawable borderDrawable = new GradientDrawable();
+            borderDrawable.setColor(Color.TRANSPARENT); // Keep the background transparent
+            borderDrawable.setStroke(8, ContextCompat.getColor(holder.itemView.getContext(), R.color.primary_color)); // Set border color
+            borderDrawable.setCornerRadius(32f); // Adjust radius for a smoother border
+
+            holder.cardBorderContainer.setBackground(borderDrawable);
         } else {
-            holder.fabCompleted.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.getContext(),R.color.slate_grey_color)));
+            holder.ibDone.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.getContext(), R.color.slate_grey_color)));
+
+            GradientDrawable borderDrawable = new GradientDrawable();
+            borderDrawable.setColor(Color.TRANSPARENT);
+            borderDrawable.setStroke(8, ContextCompat.getColor(holder.itemView.getContext(), android.R.color.transparent)); // No visible border
+
+            holder.cardBorderContainer.setBackground(borderDrawable);
         }
         holder.tvPrimaryMuscles.setText("Primary Muscles: " + primaryMuscles);
         holder.tvEquipment.setText("Equipment: " + equipment);
@@ -69,7 +86,9 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvExerciseName, tvExerciseDescription, tvPrimaryMuscles, tvEquipment, tvSetsReps;
-        FloatingActionButton fabCompleted;
+        ImageButton ibDone;
+        FrameLayout cardBorderContainer;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -78,7 +97,8 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
             tvPrimaryMuscles = itemView.findViewById(R.id.tvPrimaryMuscles);
             tvEquipment = itemView.findViewById(R.id.tvEquipment);
             tvSetsReps = itemView.findViewById(R.id.tvSetsReps);
-            fabCompleted = itemView.findViewById(R.id.floatingCheckedButton);
+            ibDone = itemView.findViewById(R.id.ib_done);
+            cardBorderContainer = itemView.findViewById(R.id.cardBorderContainer);
         }
     }
 }

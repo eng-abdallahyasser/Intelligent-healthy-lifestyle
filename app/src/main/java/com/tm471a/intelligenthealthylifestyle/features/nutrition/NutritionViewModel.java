@@ -44,7 +44,6 @@ public class NutritionViewModel extends ViewModel {
                     statusMessage.postValue(e.getMessage());
                 }
             }
-
             @Override
             public void onError(String error) {
                 // Handle errors

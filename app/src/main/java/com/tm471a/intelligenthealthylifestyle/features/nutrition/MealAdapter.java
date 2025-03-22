@@ -44,7 +44,6 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
 
     static class MealViewHolder extends RecyclerView.ViewHolder {
         TextView mealName, mealIngredients, mealCalories;
-
         public MealViewHolder(@NonNull View itemView) {
             super(itemView);
             mealName = itemView.findViewById(R.id.tvMealName);

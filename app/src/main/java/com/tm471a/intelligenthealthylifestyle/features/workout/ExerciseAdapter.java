@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,7 +38,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
 
         holder.tvExerciseName.setText(exercise.getName());
         holder.tvExerciseDescription.setText(exercise.getDescription());
-        holder.floatingCheckedButton.setVisibility(View.GONE);
+        holder.ibDone.setVisibility(View.GONE);
         holder.tvPrimaryMuscles.setText("Primary Muscles: " + String.join(", ", exercise.getPrimaryMuscles()));
         holder.tvEquipment.setText("Equipment: " + String.join(", ", exercise.getEquipment()));
         holder.tvSetsReps.setText("Sets: " + exercise.getSets() + " | Reps: " + exercise.getReps());
@@ -50,7 +51,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvExerciseName, tvExerciseDescription, tvPrimaryMuscles, tvEquipment, tvSetsReps;
-        FloatingActionButton floatingCheckedButton;
+        ImageButton ibDone;;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,7 +60,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
             tvPrimaryMuscles = itemView.findViewById(R.id.tvPrimaryMuscles);
             tvEquipment = itemView.findViewById(R.id.tvEquipment);
             tvSetsReps = itemView.findViewById(R.id.tvSetsReps);
-            floatingCheckedButton=itemView.findViewById(R.id.floatingCheckedButton);
+            ibDone=itemView.findViewById(R.id.ib_done);
         }
     }
 }

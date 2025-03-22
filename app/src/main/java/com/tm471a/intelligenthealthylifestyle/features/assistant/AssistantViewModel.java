@@ -25,7 +25,6 @@ public class AssistantViewModel extends AndroidViewModel {
             if (isReady) welcomeUser();
         });
     }
-
     private  void welcomeUser(){
         repository.welcomeUser(
                 new AssistantRepository.ResponseCallback() {

@@ -23,7 +23,6 @@ public class ProgressRepository {
     private final MutableLiveData<List<WorkoutLog>> workoutLogs = new MutableLiveData<>();
     private final MutableLiveData<List<MeasurementLog>> measurementLogs = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
-
     public ProgressRepository() {
         setupFirestoreListeners();
     }

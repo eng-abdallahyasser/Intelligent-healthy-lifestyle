@@ -24,7 +24,6 @@ public class MyPlanViewModel extends ViewModel {
                                 workoutPlan.getWorkoutDayList().get(0).getExercises() != null &&
                                 !workoutPlan.getWorkoutDayList().get(0).getExercises().isEmpty() &&
                                 workoutPlan.getWorkoutDayList().get(0).getExercises().get(0).getPrimaryMuscles() != null) {
-
                             String firstMuscle = workoutPlan.getWorkoutDayList()
                                     .get(0).getExercises().get(0).getPrimaryMuscles().get(0);
 

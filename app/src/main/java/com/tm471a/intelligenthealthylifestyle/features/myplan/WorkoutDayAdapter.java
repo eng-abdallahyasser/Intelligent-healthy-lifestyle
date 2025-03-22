@@ -41,7 +41,6 @@ public class WorkoutDayAdapter extends RecyclerView.Adapter<WorkoutDayAdapter.Vi
         holder.exerciseRecyclerView.setAdapter(exerciseAdapter);
     }
 
-
     @Override
     public int getItemCount() {
         return workoutDays.size();
