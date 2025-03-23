@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.tm471a.intelligenthealthylifestyle.R;
 import com.tm471a.intelligenthealthylifestyle.databinding.FragmentMyPlanBinding;
@@ -21,12 +22,27 @@ public class MyPlanFragment extends Fragment {
 
     private FragmentMyPlanBinding binding;
     private MyPlanViewModel viewModel;
+    WorkoutDayAdapter workoutDayAdapter;
+
 
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMyPlanBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(MyPlanViewModel.class);
+        binding.rvWorkoutDays.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        viewModel.statusMessage.observe(getViewLifecycleOwner(), message -> {
+            if (message.equals("done")) {
+                workoutDayAdapter = new WorkoutDayAdapter(viewModel.subscribedPlan.getValue().getWorkoutDayList(), viewModel);
+                binding.rvWorkoutDays.setAdapter(workoutDayAdapter);
+
+                Log.d("MyPlanFragment", "Plan Name: " + viewModel.plan.getPlanName());
+            }
+            else{
+                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+            }
+        });
 
         viewModel.subscribedPlan.observe(getViewLifecycleOwner(), workoutPlan -> {
             if (workoutPlan != null) {
@@ -36,10 +52,6 @@ public class MyPlanFragment extends Fragment {
                 binding.tvGoal.setText("Goal: " + workoutPlan.getGoal());
                 binding.tvDaysPerWeek.setText("Days Per Week: " + workoutPlan.getDaysPerWeek() + "days");
                 binding.tvSessionDuration.setText("Session Duration: " + workoutPlan.getSessionDuration());
-
-                WorkoutDayAdapter workoutDayAdapter = new WorkoutDayAdapter(workoutPlan.getWorkoutDayList(), viewModel);
-                binding.rvWorkoutDays.setLayoutManager(new LinearLayoutManager(getContext()));
-                binding.rvWorkoutDays.setAdapter(workoutDayAdapter);
             }
         });
 

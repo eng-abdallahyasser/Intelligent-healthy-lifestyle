@@ -24,11 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHolder> {
-    private MyPlanViewModel viewModel;
     private WorkoutDay workoutDay;
+    private MyPlanViewModel viewModel;
+     private List<Boolean> exerciseCompleted ;
 
     public ExerciseAdapter(WorkoutDay workoutDay, MyPlanViewModel viewModel) {
         this.workoutDay=workoutDay;
+        this.exerciseCompleted = workoutDay.getExerciseCompleted();
         this.viewModel = viewModel;
     }
 
@@ -53,14 +55,14 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
         String equipment = (exercise.getEquipment() != null) ? String.join(", ", exercise.getEquipment()) : "N/A";
 
         holder.ibDone.setOnClickListener(v -> {
-            workoutDay.getExerciseCompleted().set(position, !workoutDay.getExerciseCompleted().get(position));
-//            if (viewModel != null) {
-//                viewModel.updateExerciseCompletion(position, workoutDay);
-//            }
+            exerciseCompleted.set(position, !exerciseCompleted.get(position));
+            if (viewModel != null) {
+                viewModel.updateExerciseCompletion(position, workoutDay.getDay(), exerciseCompleted.get(position));
+            }
             notifyItemChanged(position);
         });
 
-        if (workoutDay.getExerciseCompleted().get(position)) {
+        if (exerciseCompleted.get(position)) {
             holder.ibDone.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.getContext(), R.color.primary_color)));
 
             GradientDrawable borderDrawable = new GradientDrawable();
@@ -85,7 +87,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return workoutDay.getExercises().size();
+        return exerciseCompleted.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -19,6 +19,10 @@ public class MyPlanViewModel extends ViewModel {
     WorkoutRepository workoutRepository;
 
     MutableLiveData<WorkoutPlan> subscribedPlan = new MutableLiveData<>();
+
+    WorkoutPlan plan;
+    final MutableLiveData<String> statusMessage =new MutableLiveData<String>("Initiating...");
+
     public MyPlanViewModel() {
         workoutRepository = new WorkoutRepository();
         workoutRepository.getSubscribedWorkoutPlan(
@@ -38,8 +42,14 @@ public class MyPlanViewModel extends ViewModel {
                             Log.e("MyPlanViewModel error", "Workout plan or primaryMuscles is null!");
                         }
                         subscribedPlan.postValue(workoutPlan);
+                        plan=workoutPlan;
+                        if(statusMessage.getValue()!="done"){
+                            statusMessage.postValue("done");
+                        }
                     }
                     public void onError(String errorMessage) {
+                        // Handle the error
+                        statusMessage.postValue(errorMessage);
                         Log.e("MyPlanViewModel", "Error fetching workout plan: " + errorMessage);
 
                         // Create a placeholder workout plan
@@ -62,7 +72,7 @@ public class MyPlanViewModel extends ViewModel {
         );
     }
 
-    public void updateExerciseCompletion(int position, WorkoutDay workoutDay) {
-        workoutRepository.updateExerciseCompletion(position, workoutDay);
+    public void updateExerciseCompletion(int position, String workoutDay, boolean completed) {
+        workoutRepository.updateExerciseCompletion(position, workoutDay, completed);
     }
 }

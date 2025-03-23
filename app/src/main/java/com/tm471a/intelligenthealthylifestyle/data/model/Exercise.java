@@ -6,42 +6,42 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Exercise {
-    @PropertyName("name")
+    @SerializedName("name")
     private String name;
 
-    @PropertyName("description")
+    @SerializedName("description")
     private String description;
 
-    @PropertyName("primary_muscles")
+    @SerializedName("primary_muscles")
     private List<String> primaryMuscles;
 
-    @PropertyName("equipment")
+    @SerializedName("equipment")
     private List<String> equipment;
 
-    @PropertyName("sets")
+    @SerializedName("sets")
     private String sets;
 
-    @PropertyName("reps")
+    @SerializedName("reps")
     private String reps;
 
     public Exercise() {}
 
     // Getters
-    @PropertyName("name")
+    @SerializedName("name")
     public String getName() { return name; }
 
-    @PropertyName("description")
+    @SerializedName("description")
     public String getDescription() { return description; }
 
-    @PropertyName("primary_muscles")
+    @SerializedName("primary_muscles")
     public List<String> getPrimaryMuscles() { return primaryMuscles; }
-    @PropertyName("equipment")
+    @SerializedName("equipment")
     public List<String> getEquipment() { return equipment; }
 
-    @PropertyName("sets")
+    @SerializedName("sets")
     public String getSets() { return sets; }
 
-    @PropertyName("reps")
+    @SerializedName("reps")
     public String getReps() { return reps; }
 
 

@@ -112,7 +112,7 @@ public class WorkoutRepository {
                 .addOnFailureListener(e -> Log.e("Firestore", "Error subscribing", e));
         ;
     }
-    public void updateExerciseCompletion(int position, WorkoutDay updatedWorkoutDay) {
+    public void updateExerciseCompletion(int position,  String workoutDay, boolean completed) {
         String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
         DocumentReference docRef = db.collection("Users").document(uid)
@@ -125,8 +125,11 @@ public class WorkoutRepository {
 
                 if (workoutDayList != null && position < workoutDayList.size()) {
                     // Update the specific item
-                    workoutDayList.set(position, updatedWorkoutDay);
-
+                    for(WorkoutDay day : workoutDayList) {
+                        if(day.getDay().equals(workoutDay)) {
+                            day.getExerciseCompleted().set(position, completed);
+                        }
+                    }
                     // Push the modified list back to Firestore
                     docRef.update("workoutDayList", workoutDayList)
                             .addOnSuccessListener(aVoid -> Log.d("Firestore", "Workout day updated successfully"))
