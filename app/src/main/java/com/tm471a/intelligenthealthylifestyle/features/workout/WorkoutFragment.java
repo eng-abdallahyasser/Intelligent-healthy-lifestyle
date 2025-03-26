@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.tm471a.intelligenthealthylifestyle.R;
 import com.tm471a.intelligenthealthylifestyle.databinding.FragmentWorkoutBinding;
 
 
@@ -23,7 +24,7 @@ public class WorkoutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentWorkoutBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this).get(WorkoutViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(WorkoutViewModel.class);
 
         setupObservers();
         setupClickListeners();
@@ -32,6 +33,7 @@ public class WorkoutFragment extends Fragment {
     }
 
     private void setupObservers() {
+
         viewModel.getWorkoutPlans().observe(getViewLifecycleOwner(), plans -> {
             if (plans != null && !plans.isEmpty()) {
                 NavController navController = Navigation.findNavController(requireView());
@@ -51,6 +53,9 @@ public class WorkoutFragment extends Fragment {
                 binding.statusCardView.setVisibility(View.VISIBLE);
                 binding.circularProgress.setVisibility(View.VISIBLE);
                 binding.tvMessage.setVisibility(View.VISIBLE);
+            }
+            else if(massage=="workout plan subscribed..."){
+//                navController.navigate(R.id.action_workoutDetailFragment_to_myPlanFragment);
             }
             else if(massage=="done"){
                 binding.statusCardView.setVisibility(View.GONE);

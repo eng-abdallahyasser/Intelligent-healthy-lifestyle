@@ -9,7 +9,13 @@
         android:id="@+id/nav_workout"
         android:name="com.tm471a.intelligenthealthylifestyle.features.workout.WorkoutFragment"
         android:label="Workout Plan"
-        tools:layout="@layout/fragment_workout" />
+        tools:layout="@layout/fragment_workout">
+        <action
+            android:id="@+id/action_workoutDetailFragment_to_myPlanFragment"
+            app:destination="@id/nav_plan"
+            app:popUpTo="@id/nav_workout"
+            app:popUpToInclusive="false"/>
+    </fragment>
 
     <fragment
         android:id="@+id/nav_nutrition"

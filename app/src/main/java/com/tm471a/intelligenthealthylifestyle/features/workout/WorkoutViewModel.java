@@ -19,16 +19,18 @@ import java.util.List;
 public class WorkoutViewModel extends ViewModel {
 
     private WorkoutRepository repository = new WorkoutRepository();
+    private boolean hasInitialized = false;
     private MutableLiveData<List<WorkoutPlan>> workoutPlans= new MutableLiveData<>() ;
     private final MutableLiveData<String> statusMessage =new MutableLiveData<String>("Initiating...");
     private final Gson gson;
 
     public WorkoutViewModel() {
         this.gson = new Gson();
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        workoutPlans = repository.getWorkoutPlans(userId);
         repository.getIsInitialized().observeForever(isReady -> {
-            if (isReady) initFourWorkoutPlan();
+            if (isReady && !hasInitialized) {
+                initFourWorkoutPlan();
+                hasInitialized = true;
+            }
         });
     }
 
@@ -106,4 +108,10 @@ public class WorkoutViewModel extends ViewModel {
         return repository.getIsInitialized();
     }
 
+    public void subscribeToWorkoutPlan(WorkoutPlan workoutPlan) {
+        repository.subscribeToWorkoutPlan(workoutPlan);
+
+        statusMessage.setValue("workout plan subscribed...");
+        Log.d("WorkoutViewModel", " workout plan subscribed...\nstatusMessage = "+statusMessage.getValue());
+    }
 }

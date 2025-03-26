@@ -74,7 +74,7 @@ public class WorkoutRepository {
                 });
     }
     private void checkInitialization() {
-        if (userData != null && geminiApiKey != null) {
+        if (Boolean.FALSE.equals(isInitialized.getValue()) && userData != null && geminiApiKey != null) {
             isInitialized.postValue(true);
         }
     }
@@ -267,8 +267,9 @@ public class WorkoutRepository {
             @SuppressLint("DefaultLocale") String systemInstruction = String.format(
                     "You are a fitness assistant helping %s (%d years old). " +
                             "They are %.1f cm tall and weigh %.1f kg. " +
+                            "Fitness level: %s. " +
                             "Fitness goals: %s. Dietary preferences: %s. " +
-                            "Generate a JSON-formatted 3 suggested workouts plans with different difficulty levels with this structure: " +
+                            "Generate a JSON-formatted 3 suggested workouts plans with different durations use this structure: " +
                             "{ " +
                             "  \"plan_name\": \"name\", " +
                             "  \"goal\": \"workout goal\", " +
@@ -296,6 +297,7 @@ public class WorkoutRepository {
                     userData.getAge(),
                     userData.getHeight(),
                     userData.getWeight(),
+                    userData.getCurrentFitnessLevel(),
                     String.join(", ", userData.getFitnessGoals()),
                     String.join(", ", userData.getDietaryPreferences())
             );

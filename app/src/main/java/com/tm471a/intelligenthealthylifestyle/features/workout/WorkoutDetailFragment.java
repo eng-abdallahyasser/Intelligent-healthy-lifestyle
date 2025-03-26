@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
@@ -18,7 +19,7 @@ import com.tm471a.intelligenthealthylifestyle.databinding.FragmentWorkoutDetailB
 
 public class WorkoutDetailFragment extends Fragment {
     private FragmentWorkoutDetailBinding binding;
-    private WorkoutRepository repository = new WorkoutRepository();
+    private WorkoutViewModel workoutViewModel;
     private WorkoutPlan workoutPlan;
 
     @SuppressLint("SetTextI18n")
@@ -27,6 +28,7 @@ public class WorkoutDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentWorkoutDetailBinding.inflate(inflater, container, false);
+        workoutViewModel = new ViewModelProvider(requireActivity()).get(WorkoutViewModel.class);
 
         // Retrieve the workout plan from arguments
         if (getArguments() != null) {
@@ -48,12 +50,13 @@ public class WorkoutDetailFragment extends Fragment {
             binding.rvExercises.setLayoutManager(new LinearLayoutManager(getContext()));
             binding.rvExercises.setAdapter(adapter);
             binding.btnSubscribe.setOnClickListener(v -> {
-                repository.subscribeToWorkoutPlan(workoutPlan);
+                workoutViewModel.subscribeToWorkoutPlan(workoutPlan);
             });
 
         }
         return binding.getRoot();
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

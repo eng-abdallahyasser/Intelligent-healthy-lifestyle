@@ -1,22 +1,29 @@
 package com.tm471a.intelligenthealthylifestyle.auth;
 
 import android.app.Application;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tm471a.intelligenthealthylifestyle.data.model.User;
+import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutPlan;
 import com.tm471a.intelligenthealthylifestyle.data.repository.AuthRepository;
+import com.tm471a.intelligenthealthylifestyle.data.repository.WorkoutRepository;
 import com.tm471a.intelligenthealthylifestyle.utils.Resource;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 // AuthViewModel.java
 public class AuthViewModel extends AndroidViewModel {
     private final AuthRepository authRepository;
     private final MutableLiveData<Resource<User>> userLiveData = new MutableLiveData<>();
-    public AuthViewModel(Application application) {
+    public AuthViewModel(@NonNull Application application) {
         super(application);
         authRepository = new AuthRepository();
     }

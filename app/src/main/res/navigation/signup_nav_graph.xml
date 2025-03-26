@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/signup_nav_graph"
+    app:startDestination="@id/nav_workout">
+    <fragment
+        android:id="@+id/nav_workout"
+        android:name="com.tm471a.intelligenthealthylifestyle.features.workout.WorkoutFragment"
+        android:label="Workout Plan"
+        tools:layout="@layout/fragment_workout" />
+
+    <fragment
+        android:id="@+id/workoutDetailFragment"
+        android:name="com.tm471a.intelligenthealthylifestyle.features.workout.WorkoutDetailFragment"
+        android:label="Workout Details">
+        <argument
+            android:name="workoutPlan"
+            app:argType="com.tm471a.intelligenthealthylifestyle.data.model.WorkoutPlan" />
+    </fragment>
+
+</navigation>

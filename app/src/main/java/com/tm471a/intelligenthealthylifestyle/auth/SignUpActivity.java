@@ -33,7 +33,10 @@ public class SignUpActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, fitnessLevels);
         binding.etCurrentFitnessLevel.setAdapter(adapter);
 
-        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        authViewModel = new ViewModelProvider(
+                this,
+                new AuthViewModelFactory(getApplication())
+        ).get(AuthViewModel.class);
 
         setupObservers();
         setupClickListeners();
@@ -52,7 +55,7 @@ public class SignUpActivity extends AppCompatActivity {
                     break;
                 case SUCCESS:
                     showLoading(false);
-                    navigateToDashboard();
+                    navigateToSubscribePlanScreen();
                     break;
                 case ERROR:
                     showLoading(false);
@@ -86,7 +89,7 @@ public class SignUpActivity extends AppCompatActivity {
         String gender = binding.btnGender.getText().toString().trim();
         String medicalConditionsOrInjuries = Objects.requireNonNull(binding.etMedicalConditionsOrInjuries.getText()).toString().trim();
 
-        if (validateInputs(name, email, password, heightStr, weightStr)) {
+        if (validateInputs(name, email, password, heightStr, weightStr, ageStr, gender, medicalConditionsOrInjuries)) {
             double height = Double.parseDouble(heightStr);
             double weight = Double.parseDouble(weightStr);
             int age = Integer.parseInt(ageStr);
@@ -94,7 +97,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    private boolean validateInputs(String name, String email, String password, String height, String weight) {
+    private boolean validateInputs(String name, String email, String password, String height, String weight, String ageStr, String gender, String medicalConditionsOrInjuries) {
         if (name.isEmpty()) {
             showError("Please enter your name");
             return false;
@@ -115,6 +118,24 @@ public class SignUpActivity extends AppCompatActivity {
             showError("Please enter valid weight");
             return false;
         }
+        if (ageStr.isEmpty()) {
+            showError("Please enter your age");
+            return false;}
+        if (gender.isEmpty()) {
+            showError("Please select your gender");
+            return false;}
+        if (binding.etCurrentFitnessLevel.getText().toString().isEmpty()) {
+            showError("Please select your current fitness level");
+            return false;}
+        if (getSelectedFitnessGoals().isEmpty()) {
+            showError("Please select at least one fitness goal");
+            return false;}
+        if (getSelectedDietaryPreferences().isEmpty()) {
+            showError("Please select at least one dietary preference");
+            return false;}
+//        if (medicalConditionsOrInjuries.isEmpty()) {
+//            showError("Please enter your medical conditions or injuries");
+//            return false;}
         return true;
     }
     // Helper method to get fitness goals
@@ -145,9 +166,8 @@ public class SignUpActivity extends AppCompatActivity {
         finish(); // Simply close current activity to return to Login
     }
 
-    private void navigateToDashboard() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+    private void navigateToSubscribePlanScreen() {
+        Intent intent = new Intent(this, SubscribePlan.class);
         startActivity(intent);
         finish();
     }
