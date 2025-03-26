@@ -24,6 +24,14 @@ public class WorkoutDay {
     public List<Boolean> getExerciseCompleted() {
         return exerciseCompleted;
     }
+    public Boolean getDayCompleted() {
+        for (Boolean completed : exerciseCompleted) {
+            if (!completed) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public void setExerciseCompleted(List<Boolean> exerciseCompleted) {
         this.exerciseCompleted = exerciseCompleted;
@@ -43,5 +51,11 @@ public class WorkoutDay {
 
     public void setExercises(List<Exercise> exercises) {
         this.exercises = exercises;
+    }
+
+    public void resetExerciseCompleted(boolean b) {
+        for (int i = 0; i < exerciseCompleted.size(); i++) {
+            exerciseCompleted.set(i, b);
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.tm471a.intelligenthealthylifestyle.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -29,6 +30,7 @@ public class SubscribePlan extends AppCompatActivity {
         sharedWorkoutViewModel.getStatusMessage().observe(this, message -> {
             if (message.equals("workout plan subscribed...")) {
                 navigateToDashboard();
+                Toast.makeText(this, "Congratulations, you created account correctly", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -17,6 +17,8 @@ import com.tm471a.intelligenthealthylifestyle.R;
 import com.tm471a.intelligenthealthylifestyle.databinding.FragmentMyPlanBinding;
 import com.tm471a.intelligenthealthylifestyle.features.profile.ProfileViewModel;
 
+import java.util.Objects;
+
 
 public class MyPlanFragment extends Fragment {
 
@@ -34,7 +36,7 @@ public class MyPlanFragment extends Fragment {
 
         viewModel.statusMessage.observe(getViewLifecycleOwner(), message -> {
             if (message.equals("done")) {
-                workoutDayAdapter = new WorkoutDayAdapter(viewModel.subscribedPlan.getValue().getWorkoutDayList(), viewModel);
+                workoutDayAdapter = new WorkoutDayAdapter(Objects.requireNonNull(viewModel.subscribedPlan.getValue()).getWorkoutDayList(), viewModel);
                 binding.rvWorkoutDays.setAdapter(workoutDayAdapter);
 
                 Log.d("MyPlanFragment", "Plan Name: " + viewModel.plan.getPlanName());
@@ -45,6 +47,10 @@ public class MyPlanFragment extends Fragment {
         });
 
         viewModel.subscribedPlan.observe(getViewLifecycleOwner(), workoutPlan -> {
+            if (viewModel.statusMessage.getValue().equals("done") && workoutPlan.checkWeekCoplated()) {
+                workoutDayAdapter = new WorkoutDayAdapter(Objects.requireNonNull(viewModel.subscribedPlan.getValue()).getWorkoutDayList(), viewModel);
+                binding.rvWorkoutDays.setAdapter(workoutDayAdapter);
+            }
             if (workoutPlan != null) {
                 binding.tvPlanName.setText(workoutPlan.getPlanName());
                 binding.tvDuration.setText("Duration: " + workoutPlan.getDuration());

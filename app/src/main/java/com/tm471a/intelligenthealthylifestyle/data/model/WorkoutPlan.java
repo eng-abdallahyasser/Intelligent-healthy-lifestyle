@@ -21,6 +21,8 @@ public class WorkoutPlan implements Serializable {
 
     @SerializedName("workout_day_list")
     private List<WorkoutDay> workoutDayList;
+
+    private int numberOfComplatedWeeks;
     @SerializedName("difficulty")
     private String difficulty;
 
@@ -32,12 +34,37 @@ public class WorkoutPlan implements Serializable {
         this.duration = duration;
         this.workoutDayList = exercises;
         this.difficulty = difficulty;
+        initExerciseCompleted();
     }
     public WorkoutPlan initExerciseCompleted() {
+        numberOfComplatedWeeks=0;
         for (WorkoutDay workoutDay : workoutDayList) {
             workoutDay.initExerciseCompleted();
         }
         return this;
+    }
+    public int getNumberOfComplatedWeeks() {
+        return numberOfComplatedWeeks;
+    }
+
+    public void setNumberOfComplatedWeeks(int numberOfComplatedWeeks) {
+        this.numberOfComplatedWeeks = numberOfComplatedWeeks;
+    }
+
+    public Boolean checkWeekCoplated(){
+        Boolean completed = true;
+        for(WorkoutDay workoutDay : workoutDayList){
+            if(!workoutDay.getDayCompleted()){
+               completed=false;
+            }
+        }
+        if (completed){
+            numberOfComplatedWeeks++;
+            for(WorkoutDay workoutDay : workoutDayList){
+                workoutDay.resetExerciseCompleted(false);
+            }
+        }
+        return completed;
     }
 
     public String getGoal() {

@@ -5,12 +5,15 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutPlan;
 import com.tm471a.intelligenthealthylifestyle.data.repository.WorkoutRepository;
@@ -50,7 +53,10 @@ public class WorkoutDetailFragment extends Fragment {
             binding.rvExercises.setLayoutManager(new LinearLayoutManager(getContext()));
             binding.rvExercises.setAdapter(adapter);
             binding.btnSubscribe.setOnClickListener(v -> {
+                NavController navController= Navigation.findNavController(requireView());
                 workoutViewModel.subscribeToWorkoutPlan(workoutPlan);
+                navController.popBackStack();
+                Toast.makeText(getContext(), "Workout Plan Subscribed", Toast.LENGTH_SHORT).show();
             });
 
         }

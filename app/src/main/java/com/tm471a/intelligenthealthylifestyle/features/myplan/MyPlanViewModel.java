@@ -13,6 +13,7 @@ import com.tm471a.intelligenthealthylifestyle.data.repository.WorkoutRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class MyPlanViewModel extends ViewModel {
 
@@ -74,5 +75,18 @@ public class MyPlanViewModel extends ViewModel {
 
     public void updateExerciseCompletion(int position, String workoutDay, boolean completed) {
         workoutRepository.updateExerciseCompletion(position, workoutDay, completed);
+        WorkoutPlan workoutPlan=subscribedPlan.getValue();
+        assert workoutPlan != null;
+        if(workoutPlan.getWorkoutDayList()!=null) {
+            List<WorkoutDay> workoutDayList = Objects.requireNonNull(workoutPlan).getWorkoutDayList();
+            for(WorkoutDay day : workoutDayList) {
+
+                if (day.getDay().equals(workoutDay) && position < day.getExercises().size()) {
+                    // Update the specific item
+                    day.getExerciseCompleted().set(position, completed);
+                }
+            }
+        }
+        subscribedPlan.setValue(workoutPlan);
     }
 }

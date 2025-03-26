@@ -120,20 +120,20 @@ public class WorkoutRepository {
 
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
-                // Convert Firestore document to a List
-                List<WorkoutDay> workoutDayList = documentSnapshot.toObject(WorkoutPlan.class).getWorkoutDayList();
+                WorkoutPlan workoutPlan=documentSnapshot.toObject(WorkoutPlan.class);
+                List<WorkoutDay> workoutDayList = workoutPlan.getWorkoutDayList();
+                for(WorkoutDay day : workoutDayList) {
 
-                if (workoutDayList != null && position < workoutDayList.size()) {
-                    // Update the specific item
-                    for(WorkoutDay day : workoutDayList) {
-                        if(day.getDay().equals(workoutDay)) {
-                            day.getExerciseCompleted().set(position, completed);
-                        }
+                    if (day.getDay().equals(workoutDay)&& position < day.getExercises().size()) {
+                        // Update the specific item
+                        day.getExerciseCompleted().set(position, completed);
+
+                        workoutPlan.checkWeekCoplated();
+                        // Push the modified list back to Firestore
+                        docRef.set(workoutPlan)
+                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Workout day updated successfully"))
+                                .addOnFailureListener(e -> Log.e("Firestore", "Error updating workout day", e));
                     }
-                    // Push the modified list back to Firestore
-                    docRef.update("workoutDayList", workoutDayList)
-                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "Workout day updated successfully"))
-                            .addOnFailureListener(e -> Log.e("Firestore", "Error updating workout day", e));
                 }
             }
         }).addOnFailureListener(e -> Log.e("Firestore", "Error fetching workout plan", e));
@@ -169,6 +169,7 @@ public class WorkoutRepository {
             @SuppressLint("DefaultLocale") String systemInstruction = String.format(
                     "You are a fitness assistant helping %s (%d years old). " +
                             "They are %.1f cm tall and weigh %.1f kg. " +
+                            "Fitness level: %s. " +
                             "Fitness goals: %s. Dietary preferences: %s. " +
                             "Generate a JSON-formatted workout plan with this structure: " +
                             "{ " +
@@ -198,6 +199,7 @@ public class WorkoutRepository {
                     userData.getAge(),
                     userData.getHeight(),
                     userData.getWeight(),
+                    userData.getCurrentFitnessLevel(),
                     String.join(", ", userData.getFitnessGoals()),
                     String.join(", ", userData.getDietaryPreferences())
             );

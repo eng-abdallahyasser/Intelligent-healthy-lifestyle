@@ -54,10 +54,7 @@ public class WorkoutFragment extends Fragment {
                 binding.circularProgress.setVisibility(View.VISIBLE);
                 binding.tvMessage.setVisibility(View.VISIBLE);
             }
-            else if(massage=="workout plan subscribed..."){
-//                navController.navigate(R.id.action_workoutDetailFragment_to_myPlanFragment);
-            }
-            else if(massage=="done"){
+            else if(massage=="done"||massage=="workout plan subscribed..."){
                 binding.statusCardView.setVisibility(View.GONE);
             }
             else {
