@@ -58,6 +58,12 @@ public class MyPlanFragment extends Fragment {
                 binding.tvGoal.setText("Goal: " + workoutPlan.getGoal());
                 binding.tvDaysPerWeek.setText("Days Per Week: " + workoutPlan.getDaysPerWeek() + "days");
                 binding.tvSessionDuration.setText("Session Duration: " + workoutPlan.getSessionDuration());
+                binding.tvCompletedWeeks.setText(workoutPlan.getCompletedWeeks()+" Weeks Completed ");
+                if (workoutPlan.getCompletedWeeks() == 0) {
+                    binding.tvCompletedWeeks.setTextColor(getResources().getColor(R.color.slate_grey_color));
+                } else {
+                    binding.tvCompletedWeeks.setTextColor(getResources().getColor(R.color.primary_color));
+                }
             }
         });
 

@@ -120,4 +120,8 @@ public class WorkoutPlan implements Serializable {
     public void setDifficulty(String difficulty) {
         this.difficulty = difficulty;
     }
+
+    public int getCompletedWeeks() {
+        return numberOfComplatedWeeks;
+    }
 }

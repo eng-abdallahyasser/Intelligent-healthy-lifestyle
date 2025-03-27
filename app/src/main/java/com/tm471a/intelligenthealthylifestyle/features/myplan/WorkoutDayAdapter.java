@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,8 +37,15 @@ public class WorkoutDayAdapter extends RecyclerView.Adapter<WorkoutDayAdapter.Vi
 
         WorkoutDay workoutDay = workoutDays.get(position);
 
-        holder.textViewDay.setText(workoutDay.getDay());
-
+        viewModel.subscribedPlan.observe((LifecycleOwner) holder.itemView.getContext(), workoutPlan -> {
+            if(workoutDay.getDayCompleted()){
+                holder.textViewDay.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.primary_color));
+                holder.textViewDay.setText(workoutDay.getDay()+" (Completed)");
+            }else{
+                holder.textViewDay.setText(workoutDay.getDay());
+                holder.textViewDay.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.slate_grey_color));
+            }
+        });
         ExerciseAdapter exerciseAdapter = new ExerciseAdapter(workoutDay,viewModel);
         holder.exerciseRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.exerciseRecyclerView.setAdapter(exerciseAdapter);
