@@ -23,7 +23,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -80,12 +82,21 @@ public class WorkoutRepository {
     }
 
     public void saveWorkoutPlan(WorkoutPlan workoutPlan) {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        db.collection("Users").document(uid)
+
+        try {
+            // Test serialization first
+            Map<String, Object> data = new HashMap<>();
+            data.put("test", workoutPlan);
+            Log.d("SERIALIZATION", "Serialized data: " + data);
+        } catch (Exception e) {
+            Log.e("SERIALIZATION", "Failed to serialize", e);
+        }
+
+        db.collection("Users").document(userData.getUid())
                 .collection("workout_plans")
                 .add(workoutPlan)
-                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Message added successfully"))
-                .addOnFailureListener(e -> Log.e("FirestoreError", "Failed to add message", e));
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Workout plan added successfully"))
+                .addOnFailureListener(e -> Log.e("FirestoreError", "Failed to add Workout plan ", e));
     }
     public MutableLiveData<Boolean> getIsInitialized() {
         return isInitialized;
@@ -205,13 +216,14 @@ public class WorkoutRepository {
                             "Fitness goals: %s. Dietary preferences: %s. " +
                             "Generate a JSON-formatted workout plan with this structure: " +
                             "{ " +
-                            "  \"plan_name\": \"name\", " +
+                            "  \"planName\": \"name\", " +
                             "  \"goal\": \"workout goal\", " +
                             "  \"duration\": \"duration\", " +
-                            "  \"days_per_week\": \"days per week\", " +
-                            "  \"session_duration\": \"session duration for one day\", " +
+                            "  \"daysPerWeek\": \"days per week\", " +
+                            "  \"numberOfCompletedWeeks\": \"0\", " +
+                            "  \"sessionDuration\": \"session duration for one day\", " +
                             "  \"difficulty\": \"level\", " +
-                            "  \"workout_day_list\": [ " +
+                            "  \"workoutDayList\": [ " +
                             "    { " +
                             "      \"day\": \"day\", " +
                             "      \"exercises\": [ " +
@@ -305,13 +317,14 @@ public class WorkoutRepository {
                             "Fitness goals: %s. Dietary preferences: %s. " +
                             "Generate a JSON-formatted 3 suggested workouts plans with different durations use this structure: " +
                             "{ " +
-                            "  \"plan_name\": \"name\", " +
+                            "  \"planName\": \"name\", " +
                             "  \"goal\": \"workout goal\", " +
                             "  \"duration\": \"duration\", " +
-                            "  \"days_per_week\": \"days per week\", " +
-                            "  \"session_duration\": \"session duration for one day\", " +
+                            "  \"daysPerWeek\": \"days per week\", " +
+                            "  \"numberOfCompletedWeeks\": \"0\", " +
+                            "  \"sessionDuration\": \"session duration for one day\", " +
                             "  \"difficulty\": \"level\", " +
-                            "  \"workout_day_list\": [ " +
+                            "  \"workoutDayList\": [ " +
                             "    { " +
                             "      \"day\": \"day\", " +
                             "      \"exercises\": [ " +

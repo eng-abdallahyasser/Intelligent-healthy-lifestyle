@@ -1,75 +1,75 @@
 package com.tm471a.intelligenthealthylifestyle.data.model;
 
 import com.google.firebase.firestore.PropertyName;
-import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class Exercise {
-    @SerializedName("name")
+    @PropertyName("name")
     private String name;
 
-    @SerializedName("description")
+    @PropertyName("description")
     private String description;
 
-    @SerializedName("primary_muscles")
+    @PropertyName("primary_muscles")
     private List<String> primaryMuscles;
 
-    @SerializedName("equipment")
+    @PropertyName("equipment")
     private List<String> equipment;
 
-    @SerializedName("sets")
+    @PropertyName("sets")
     private String sets;
 
-    @SerializedName("reps")
+    @PropertyName("reps")
     private String reps;
 
     public Exercise() {}
 
     // Getters
-    @SerializedName("name")
+    @PropertyName("name")
     public String getName() { return name; }
 
-    @SerializedName("description")
+    @PropertyName("description")
     public String getDescription() { return description; }
 
-    @SerializedName("primary_muscles")
+    @PropertyName("primary_muscles")
     public List<String> getPrimaryMuscles() { return primaryMuscles; }
-    @SerializedName("equipment")
+    @PropertyName("equipment")
     public List<String> getEquipment() { return equipment; }
 
-    @SerializedName("sets")
+    @PropertyName("sets")
     public String getSets() { return sets; }
 
-    @SerializedName("reps")
+    @PropertyName("reps")
     public String getReps() { return reps; }
 
 
 
-
+    @PropertyName("description")
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @PropertyName("name")
     public void setName(String name) {
         this.name = name;
     }
-
+    @PropertyName("primary_muscles")
     public void setPrimaryMuscles(List<String> primaryMuscles) {
         this.primaryMuscles = primaryMuscles;
     }
 
-
+    @PropertyName("equipment")
     public void setEquipment(List<String> equipment) {
         this.equipment = equipment;
     }
 
-
+    @PropertyName("sets")
     public void setSets(String sets) {
         this.sets = sets;
     }
 
-
+    @PropertyName("reps")
     public void setReps(String reps) {
         this.reps = reps;
     }
