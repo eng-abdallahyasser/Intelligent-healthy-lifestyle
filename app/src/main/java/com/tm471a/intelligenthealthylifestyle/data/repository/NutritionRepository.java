@@ -1,6 +1,7 @@
 package com.tm471a.intelligenthealthylifestyle.data.repository;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -9,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.tm471a.intelligenthealthylifestyle.data.model.NutritionAdvice;
 import com.tm471a.intelligenthealthylifestyle.data.model.User;
+import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutPlan;
 
 
 import org.json.JSONArray;
@@ -69,6 +71,38 @@ public class NutritionRepository {
             isInitialized.postValue(true);
         }
     }
+
+    public void saveNutrition(NutritionAdvice nutritionAdvice) {
+        db.collection("Users").document(userData.getUid())
+                .collection("nutrition")
+                .document("nutrition")
+                .set(nutritionAdvice)
+                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Successfully nutrition saving!"))
+                .addOnFailureListener(e -> Log.e("Firestore", "Error nutrition saving", e));
+        ;
+    }
+
+    public void getNutrition(NutritionRepository.OnNutritionFetchedListener listener) {
+        db.collection("Users").document(userData.getUid())
+                .collection("nutrition")
+                .document("nutrition")
+                .get()
+                .addOnSuccessListener(documentSnapshot  -> {
+                    if (documentSnapshot.exists()) {
+                        NutritionAdvice nutrition = documentSnapshot.toObject(NutritionAdvice.class);
+                        listener.onSuccess(nutrition);
+                    }
+                    else {
+                        listener.onError("Error fetching workout plan");
+
+                    }
+                });
+    }
+    public interface OnNutritionFetchedListener {
+        void onSuccess(NutritionAdvice nutrition);
+        void onError(String errorMessage);
+    }
+
     public void generateNutritionAdvice( NutritionRepository.ResponseCallback callback) {
         try {
             // 1. Create system instruction with user data

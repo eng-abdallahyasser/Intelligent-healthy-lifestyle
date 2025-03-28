@@ -18,39 +18,49 @@ public class NutritionViewModel extends ViewModel {
     public NutritionViewModel() {
         this.gson = new Gson();
         repository.getIsInitialized().observeForever(isReady->{
-            if (isReady) generateNutritionAdvice();
+            if (isReady) setupNutritionAdvice();
         });
     }
 
-    public void generateNutritionAdvice() {
-        statusMessage.postValue("Generating Nutrition Advice For You...");
-
-        repository.generateNutritionAdvice( new NutritionRepository.ResponseCallback() {
+    public void setupNutritionAdvice() {
+        repository.getNutrition(new NutritionRepository.OnNutritionFetchedListener() {
             @Override
-            public void onResponse(String response) {
-                try {
-                    String cleanedJson = response.replaceAll("```json\n|```", "");
-                    NutritionAdvice generatedNutritionAdvice = gson.fromJson(cleanedJson, NutritionAdvice.class);
+            public void onSuccess(NutritionAdvice nutrition) {
+                nutritionAdvice.postValue(nutrition);
+                statusMessage.postValue("done");
 
-                    if(generatedNutritionAdvice!=null){
-                    nutritionAdvice.postValue(generatedNutritionAdvice);}
-                    else {
-                        statusMessage.postValue("NutritionViewModel : generatedNutritionAdvice is null");
-                    }
-                    statusMessage.postValue("done");
-                    Log.d("NutritionViewModel", "generateNutritionAdvice() called");
-                } catch (Exception e) {
-                    // Handle parsing errors
-                    statusMessage.postValue(e.getMessage());
-                }
             }
             @Override
-            public void onError(String error) {
-                // Handle errors
-                statusMessage.postValue(error);
+            public void onError(String errorMessage) {
+                statusMessage.postValue("Generating Nutrition Advice For You...");
+                repository.generateNutritionAdvice( new NutritionRepository.ResponseCallback() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            String cleanedJson = response.replaceAll("```json\n|```", "");
+                            NutritionAdvice generatedNutritionAdvice = gson.fromJson(cleanedJson, NutritionAdvice.class);
+
+                            if(generatedNutritionAdvice!=null){
+                                repository.saveNutrition(generatedNutritionAdvice);
+                                nutritionAdvice.postValue(generatedNutritionAdvice);}
+                            else {
+                                statusMessage.postValue("NutritionViewModel : generatedNutritionAdvice is null");
+                            }
+                            statusMessage.postValue("done");
+                            Log.d("NutritionViewModel", "generateNutritionAdvice() called");
+                        } catch (Exception e) {
+                            // Handle parsing errors
+                            statusMessage.postValue(e.getMessage());
+                        }
+                    }
+                    @Override
+                    public void onError(String error) {
+                        // Handle errors
+                        statusMessage.postValue(error);
+                    }
+                });
             }
         });
-
     }
 
     public MutableLiveData<NutritionAdvice> getNutritionAdvice() {

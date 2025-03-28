@@ -8,8 +8,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tm471a.intelligenthealthylifestyle.data.model.ChatMessage;
 import com.tm471a.intelligenthealthylifestyle.data.model.User;
 import org.json.JSONArray;
@@ -19,6 +22,8 @@ import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,6 +34,8 @@ public class AssistantRepository {
     // Add LiveData to track readiness
     private final MutableLiveData<Boolean> isInitialized = new MutableLiveData<>(false);
     private User userData;
+
+    private List<ChatMessage> messages = new ArrayList<>();
     private final Gson gson;
     private String geminiApiKey;
 
@@ -52,6 +59,7 @@ public class AssistantRepository {
                     geminiApiKey = documentSnapshot.getString("apiKey");
                     checkInitialization();
                 });
+
     }
     // Expose initialization state
 
@@ -70,7 +78,38 @@ public class AssistantRepository {
                     userData = documentSnapshot.toObject(User.class);
                     checkInitialization();
                 });
+
     }
+
+    public List<ChatMessage> getMessages() {
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db.collection("Users").document(uid).collection("messages")
+                .orderBy("timestamp", Query.Direction.ASCENDING)
+                .addSnapshotListener((querySnapshot, e) -> {
+                    if (e != null) {
+                        Log.e("FirestoreError", "Error fetching messages", e);
+                        return;
+                    }
+                    if (querySnapshot != null) {
+                        messages.clear();
+                        for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                            ChatMessage message = doc.toObject(ChatMessage.class);
+                            messages.add(message);
+                        }
+                    }
+                });
+        return messages;
+    }
+    public void saveMessages(ChatMessage message) {
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        message.setTimestamp(System.currentTimeMillis());
+        db.collection("Users").document(uid)
+                .collection("messages")
+                .add(message)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Message added successfully"))
+                .addOnFailureListener(e -> Log.e("FirestoreError", "Failed to add message", e));
+    }
+
     private JSONArray buildContentsArray(List<ChatMessage> messages) throws JSONException {
         JSONArray contentsArray = new JSONArray();
         for (ChatMessage message : messages) {
@@ -87,7 +126,7 @@ public class AssistantRepository {
         try {
             // 1. System instruction with user data
             @SuppressLint("DefaultLocale") String systemInstruction = String.format(
-                "You are a fitness assistant helping %s (%d years old). They are %.1f cm tall and weigh %.1f kg. Fitness goals: %s. Dietary preferences: %s. Provide a friendly welcome message and offer assistance.",
+                "You are a fitness assistant helping %s (%d years old). They are %.1f cm tall and weigh %.1f kg. Fitness goals: %s. Dietary preferences: %s. Provide a short friendly welcome message and offer assistance.",
                 userData.getName(),
                 userData.getAge(),
                 userData.getHeight(),
@@ -101,7 +140,7 @@ public class AssistantRepository {
                 .put(new JSONObject()
                     .put("role", "user")
                     .put("parts", new JSONArray()
-                        .put(new JSONObject().put("text", "Please welcome me and provide initial guidance."))
+                        .put(new JSONObject().put("text", "Please welcome me "))
                     )
                 );
 
@@ -116,7 +155,7 @@ public class AssistantRepository {
                 .put("generationConfig", new JSONObject()
                     .put("temperature", 0.9)
                     .put("topP", 0.95)
-                    .put("maxOutputTokens", 100)
+                    .put("maxOutputTokens", 200)
                 );
             RequestBody body = RequestBody.create(
                     requestBody.toString(),

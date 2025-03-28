@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.tm471a.intelligenthealthylifestyle.data.model.User;
@@ -38,7 +39,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 public class WorkoutRepository {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final MutableLiveData<List<WorkoutPlan>> workoutPlans = new MutableLiveData<>();
     private final String BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
     private final OkHttpClient client;
     final MutableLiveData<Boolean> isInitialized = new MutableLiveData<>(false);
@@ -78,28 +78,60 @@ public class WorkoutRepository {
             isInitialized.postValue(true);
         }
     }
+
+    public void saveWorkoutPlan(WorkoutPlan workoutPlan) {
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db.collection("Users").document(uid)
+                .collection("workout_plans")
+                .add(workoutPlan)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Message added successfully"))
+                .addOnFailureListener(e -> Log.e("FirestoreError", "Failed to add message", e));
+    }
     public MutableLiveData<Boolean> getIsInitialized() {
         return isInitialized;
     }
-    public MutableLiveData<List<WorkoutPlan>> getWorkoutPlans(String userId) {
-        db.collection("Users").document(userId)
-                .collection("workout_plans")
-                .addSnapshotListener((value, error) -> {
-                    if (error != null) {
-                        workoutPlans.postValue(null);
-                        return;
+    public void fetchWorkoutPlans(OnWorkoutPlansFetchedListener listener) {
+        // Verify userData is initialized
+        if (userData == null) {
+            if (listener != null) {
+                listener.onFailure(new Exception("User data not initialized"));
+            }
+            return;
+        }
+        db.collection("Users").document(userData.getUid()).collection("workout_plans")
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    Log.d("Firestore", "Query successful. Found " + querySnapshot.size() + " documents");
+
+                    List<WorkoutPlan> retrievedWorkoutPlans = new ArrayList<>();
+                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                        WorkoutPlan workoutPlan = doc.toObject(WorkoutPlan.class);
+                        if (workoutPlan != null) {
+                            Log.d("Firestore", "Document ID: " + doc.getId() + ", Data: " + doc.getData());
+                            retrievedWorkoutPlans.add(workoutPlan);
+                        } else {
+                            Log.e("Firestore", "Failed to convert document " + doc.getId() + " to WorkoutPlan object");
+                        }
                     }
 
-                    List<WorkoutPlan> plans = new ArrayList<>();
-                    assert value != null;
-                    for (QueryDocumentSnapshot doc : value) {
-                        WorkoutPlan plan = doc.toObject(WorkoutPlan.class);
-                        plans.add(plan);
+                    if (listener != null) {
+                        if (!retrievedWorkoutPlans.isEmpty()) {
+                            listener.onSuccess(retrievedWorkoutPlans);
+                        } else {
+                            listener.onFailure(new Exception("No workout plans found in database"));
+                        }
                     }
-                    workoutPlans.postValue(plans);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error fetching workout plans: ", e);
+                    if (listener != null) {
+                        listener.onFailure(e);
+                    }
                 });
-
-        return workoutPlans;
+    }
+    public interface OnWorkoutPlansFetchedListener {
+        void onSuccess(List<WorkoutPlan> workoutPlans);
+        void onFailure(Exception e);
     }
 
     public void subscribeToWorkoutPlan(WorkoutPlan workoutPlan) {
@@ -263,7 +295,7 @@ public class WorkoutRepository {
             callback.onError("Request error: " + e.getMessage());
         }
     }
-    public void initFourWorkoutPlan( WorkoutRepository.ResponseCallback callback) {
+    public void initWorkoutPlans(WorkoutRepository.ResponseCallback callback) {
         try {
             // 1. Create system instruction with user data
             @SuppressLint("DefaultLocale") String systemInstruction = String.format(

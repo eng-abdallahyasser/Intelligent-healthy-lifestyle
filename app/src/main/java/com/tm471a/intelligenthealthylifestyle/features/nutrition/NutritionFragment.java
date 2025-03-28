@@ -83,7 +83,7 @@ public class NutritionFragment extends Fragment {
     private void setupClickListeners() {
         binding.fabAddNutritionAdvice.setOnClickListener(v -> {
             Log.d("NutritionFragment", "FAB clicked!");
-            viewModel.generateNutritionAdvice();
+            viewModel.setupNutritionAdvice();
         });
     }
 }

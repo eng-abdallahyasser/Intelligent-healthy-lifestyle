@@ -19,10 +19,15 @@ public class AssistantViewModel extends AndroidViewModel {
     private final MutableLiveData<List<ChatMessage>> messages = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(true);
     public AssistantViewModel(@NonNull Application application) {
+
         super(application);
+
         this.repository = new AssistantRepository();
+        this.messages.setValue(repository.getMessages());
         repository.getIsInitialized().observeForever(isReady -> {
-            if (isReady) welcomeUser();
+            if (isReady) {
+                welcomeUser();
+            }
         });
     }
     private  void welcomeUser(){
@@ -35,6 +40,7 @@ public class AssistantViewModel extends AndroidViewModel {
                         if (current != null) {
                             current.add(botMsg);
                         }
+                        repository.saveMessages(botMsg);
                         messages.postValue(current);
                         isLoading.postValue(false);
                         Log.i("iop", "onResponse: " + response  );
@@ -58,6 +64,8 @@ public class AssistantViewModel extends AndroidViewModel {
         current.add(new ChatMessage(message, false));
         messages.postValue(current);
 
+        repository.saveMessages(new ChatMessage(message, false));
+
         isLoading.postValue(true);
         repository.sendMessage(current,
                 new AssistantRepository.ResponseCallback() {
@@ -68,6 +76,7 @@ public class AssistantViewModel extends AndroidViewModel {
                         if (current != null) {
                             current.add(botMsg);
                         }
+                        repository.saveMessages(botMsg);
                         messages.postValue(current);
                         isLoading.postValue(false);
                         Log.i("iop", "onResponse: " + response + " " + message );

@@ -3,10 +3,23 @@ package com.tm471a.intelligenthealthylifestyle.data.model;
 public class ChatMessage {
     private String content;
     private boolean isBot;
+    private long timestamp;
 
     public ChatMessage(String content, boolean isBot) {
         this.content = content;
         this.isBot = isBot;
+        this.timestamp = System.currentTimeMillis();
+    }
+
+    public ChatMessage() {
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public void setBot(boolean bot) {

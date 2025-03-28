@@ -5,25 +5,24 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.List;
-
 public class WorkoutPlan implements Serializable {
-    @SerializedName("plan_name")
+    @PropertyName("plan_name")
     private String planName;
-    @SerializedName("goal")
+    @PropertyName("goal")
     private String goal;
 
-    @SerializedName("duration")
+    @PropertyName("duration")
     private String duration;
-    @SerializedName("days_per_week")
+    @PropertyName("days_per_week")
     private String daysPerWeek;
-    @SerializedName("session_duration")
+    @PropertyName("session_duration")
     private String sessionDuration;
 
-    @SerializedName("workout_day_list")
+    @PropertyName("workout_day_list")
     private List<WorkoutDay> workoutDayList;
 
     private int numberOfComplatedWeeks;
-    @SerializedName("difficulty")
+    @PropertyName("difficulty")
     private String difficulty;
 
     // Firestore requires empty constructor
@@ -36,6 +35,7 @@ public class WorkoutPlan implements Serializable {
         this.difficulty = difficulty;
         initExerciseCompleted();
     }
+
     public WorkoutPlan initExerciseCompleted() {
         numberOfComplatedWeeks=0;
         for (WorkoutDay workoutDay : workoutDayList) {

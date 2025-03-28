@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutPlan;
@@ -28,7 +27,7 @@ public class WorkoutViewModel extends ViewModel {
         this.gson = new Gson();
         repository.getIsInitialized().observeForever(isReady -> {
             if (isReady && !hasInitialized) {
-                initFourWorkoutPlan();
+                fetchWorkoutPlans();
                 hasInitialized = true;
             }
         });
@@ -54,6 +53,7 @@ public class WorkoutViewModel extends ViewModel {
                     // Post the updated list to the LiveData
                     workoutPlans.postValue(currentPlans);
                     statusMessage.postValue("done");
+                    repository.saveWorkoutPlan(workoutPlan);
                 } catch (Exception e) {
                     // Handle parsing errors
                     Log.e("WorkoutPlan", "Error parsing workout plan", e);
@@ -68,31 +68,52 @@ public class WorkoutViewModel extends ViewModel {
             }
         });
     }
-    public void initFourWorkoutPlan() {
-        statusMessage.postValue("Generating Suggested Workout Plan For You...");
-        repository.initFourWorkoutPlan(new WorkoutRepository.ResponseCallback() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    String cleanedJson = response.replaceAll("```json\n|```", "");
-                    Type listType = new TypeToken<List<WorkoutPlan>>() {}.getType();
-                    List<WorkoutPlan> initWorkoutPlans = gson.fromJson(cleanedJson, listType);
-                    Log.d("WorkoutPlan", "Plan Name: " + initWorkoutPlans.get(0).getPlanName());
+    public void fetchWorkoutPlans() {
 
-                    // Post the updated list to the LiveData
-                    workoutPlans.postValue(initWorkoutPlans);
-                    statusMessage.postValue("done");
-                } catch (Exception e) {
-                    // Handle parsing errors
-                    Log.e("WorkoutPlan", "Error parsing workout plan", e);
-                    statusMessage.postValue(e.getMessage());
-                }
+        repository.fetchWorkoutPlans(new WorkoutRepository.OnWorkoutPlansFetchedListener() {
+            @Override
+            public void onSuccess(List<WorkoutPlan> fetchedWorkoutPlans) {
+                workoutPlans.postValue(fetchedWorkoutPlans);
+                Log.d("FetchSuccess", "Fetched " + fetchedWorkoutPlans.size() + " workout plans");
+                statusMessage.postValue("done");
             }
 
             @Override
-            public void onError(String error) {
-                // Handle errors
-                statusMessage.postValue(error);
+            public void onFailure(Exception e) {
+                Log.e("FetchError", "Failed to fetch workout plans from firestore", e);
+                statusMessage.postValue("Generating Suggested Workout Plan For You...");
+                repository.initWorkoutPlans(new WorkoutRepository.ResponseCallback() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            String cleanedJson = response.replaceAll("```json\n|```", "");
+                            Type listType = new TypeToken<List<WorkoutPlan>>() {}.getType();
+                            List<WorkoutPlan> generatedtWorkoutPlans = gson.fromJson(cleanedJson, listType);
+                            Log.d("WorkoutPlan", "Plan Name: " + generatedtWorkoutPlans.get(0).getPlanName());
+
+
+
+                            // Post the updated list to the LiveData
+                            workoutPlans.postValue(generatedtWorkoutPlans);
+                            statusMessage.postValue("done");
+
+                            for (WorkoutPlan plan: generatedtWorkoutPlans){
+                                repository.saveWorkoutPlan(plan);
+                            }
+
+                        } catch (Exception e) {
+                            // Handle parsing errors
+                            Log.e("WorkoutPlan", "Error parsing workout plan", e);
+                            statusMessage.postValue(e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        // Handle errors
+                        statusMessage.postValue(error);
+                    }
+                });
             }
         });
     }
