@@ -11,6 +11,18 @@ public class Exercise {
     @PropertyName("description")
     private String description;
 
+    @PropertyName("url")
+    private String url;
+    @PropertyName("url")
+
+    public String getUrl() {
+        return url;
+    }
+    @PropertyName("url")
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     @PropertyName("primary_muscles")
     private List<String> primaryMuscles;
 

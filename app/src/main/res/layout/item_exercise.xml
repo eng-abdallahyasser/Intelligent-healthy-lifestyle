@@ -7,68 +7,114 @@
     android:layout_margin="8dp"
     android:id="@+id/cardBorderContainer">
 
-<androidx.cardview.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
-
-    <ImageButton
-        android:id="@+id/ib_done"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_gravity="bottom|right"
-        android:background="@drawable/rounded_button_background"
-        android:scaleType="centerInside"
-        android:clipToOutline="true"
-        app:srcCompat="@drawable/ic_checked" />
-
-    <LinearLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_exercise"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="220dp"
+        android:layout_margin="8dp"
+        android:animateLayoutChanges="true"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
 
-        <TextView
-            android:id="@+id/tvExerciseName"
-            style="@style/TextAppearance.MaterialComponents.Headline6"
+        <!-- GIF Background -->
+        <ImageView
+            android:id="@+id/ivExerciseGif"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="Exercise demonstration"
+            android:scaleType="centerCrop" />
+
+        <!-- Dark Overlay -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.3"
+            android:background="@android:color/black" />
+
+        <!-- Text Container -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Exercise Name"
-            android:textColor="@android:color/black" />
+            android:layout_gravity="bottom"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/tvSetsReps"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sets: 3 | Reps: 12"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/tvPrimaryMuscles"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Primary Muscles: Chest, Triceps"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/tvEquipment"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Equipment: Barbell"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Exercise Name -->
+            <TextView
+                android:id="@+id/tvExerciseName"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:shadowColor="@android:color/black"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:textColor="@android:color/white" />
+
+            <!-- Exercise Details -->
+
+        </LinearLayout>
+
+        <!-- Done Button -->
+        <ImageButton
+            android:id="@+id/ib_done"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="8dp"
+            android:background="@drawable/rounded_button_background"
+            android:clipToOutline="true"
+            android:elevation="8dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_checked" />
 
         <TextView
-            android:id="@+id/tvExerciseDescription"
-            style="@style/TextAppearance.MaterialComponents.Body2"
+            android:id="@+id/tvFullDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Exercise Description" />
+            android:layout_gravity="bottom"
+            android:layout_marginTop="8dp"
+            android:background="#80000000"
+            android:padding="16dp"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/tvEquipment" />
 
-        <TextView
-            android:id="@+id/tvPrimaryMuscles"
-            style="@style/TextAppearance.MaterialComponents.Caption"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Primary Muscles: " />
-
-        <TextView
-            android:id="@+id/tvEquipment"
-            style="@style/TextAppearance.MaterialComponents.Caption"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Equipment: " />
-
-        <TextView
-            android:id="@+id/tvSetsReps"
-            style="@style/TextAppearance.MaterialComponents.Caption"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Sets , Reps: " />
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>

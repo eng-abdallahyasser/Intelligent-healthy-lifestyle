@@ -3,6 +3,7 @@ package com.tm471a.intelligenthealthylifestyle.data.model;
 public class ChatMessage {
     private String content;
     private boolean isBot;
+    private boolean isTyped=false;
     private long timestamp;
 
     public ChatMessage(String content, boolean isBot) {
@@ -32,4 +33,12 @@ public class ChatMessage {
 
     public boolean isBot() { return isBot; }
     public String getContent() { return content; }
+
+    public boolean isTyped() {
+        return isTyped;
+    }
+
+    public void setTyped(boolean typed) {
+        isTyped = typed;
+    }
 }

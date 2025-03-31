@@ -2,6 +2,8 @@ package com.tm471a.intelligenthealthylifestyle.data.repository;
 
 
 
+import static com.tm471a.intelligenthealthylifestyle.data.ExerciseURLsMapCreator.getExerciseURLsMap;
+
 import android.annotation.SuppressLint;
 import android.util.Log;
 
@@ -229,6 +231,7 @@ public class WorkoutRepository {
                             "      \"exercises\": [ " +
                             "          { " +
                             "          \"name\": \"exercise name\", " +
+                            "          \"url\": \"gif url link from provided data\", " +
                             "          \"description\": \"detailed instructions\", " +
                             "          \"primary_muscles\": [\"muscle1\", \"muscle2\"], " +
                             "          \"equipment\": [\"equipment1\"], " +
@@ -238,7 +241,10 @@ public class WorkoutRepository {
                             "      ] " +
                             "    } " +
                             "  ] " +
-                            "}",
+                            "}" +
+                            "\n"+
+                            "\n"+
+                            "use this map to get exercise url "+ getExerciseURLsMap(),
                     userData.getName(),
                     userData.getAge(),
                     userData.getHeight(),
@@ -330,6 +336,7 @@ public class WorkoutRepository {
                             "      \"exercises\": [ " +
                             "          { " +
                             "          \"name\": \"exercise name\", " +
+                            "          \"url\": \"gif url link from provided data\", " +
                             "          \"description\": \"detailed instructions\", " +
                             "          \"primary_muscles\": [\"muscle1\", \"muscle2\"], " +
                             "          \"equipment\": [\"equipment1\"], " +
@@ -339,7 +346,11 @@ public class WorkoutRepository {
                             "      ] " +
                             "    } " +
                             "  ] " +
-                            "}",
+                            "}" +
+                            "\n"+
+                            "\n"+
+                            "use this map to get exercise url "+ getExerciseURLsMap()
+                    ,
                     userData.getName(),
                     userData.getAge(),
                     userData.getHeight(),

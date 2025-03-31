@@ -4,29 +4,36 @@ import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.tm471a.intelligenthealthylifestyle.R;
 import com.tm471a.intelligenthealthylifestyle.data.model.Exercise;
 import com.tm471a.intelligenthealthylifestyle.data.model.WorkoutDay;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHolder> {
     private WorkoutDay workoutDay;
     private MyPlanViewModel viewModel;
      private List<Boolean> exerciseCompleted ;
+    private SparseBooleanArray showDescription = new SparseBooleanArray();
+
 
     public ExerciseAdapter(WorkoutDay workoutDay, MyPlanViewModel viewModel) {
         this.workoutDay=workoutDay;
@@ -48,7 +55,30 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
         Exercise exercise = workoutDay.getExercises().get(position);
 
         holder.tvExerciseName.setText(exercise.getName());
-        holder.tvExerciseDescription.setText(exercise.getDescription());
+
+        // Set click listener on the card
+        holder.cardBorderContainer.setOnClickListener(v -> {
+            boolean isExpanded = showDescription.get(position, false);
+            showDescription.put(position, !isExpanded);
+            notifyItemChanged(position);
+        });
+        // Control expansion state
+        if (showDescription.get(position, false)) {
+            // Expanded state
+            holder.tvFullDescription.setVisibility(View.VISIBLE);
+            holder.tvFullDescription.setText(exercise.getDescription());
+            holder.tvSetsReps.setVisibility(View.GONE);
+            holder.tvEquipment.setVisibility(View.GONE);
+            holder.tvPrimaryMuscles.setVisibility(View.GONE);
+        } else {
+            // Collapsed state
+            holder.tvFullDescription.setVisibility(View.GONE);
+        }
+
+        // Load GIF using Glide
+        Glide.with(holder.itemView.getContext())
+                .load(exercise.getUrl())
+                .into(holder.ivExerciseGif);
 
         // Handle potential null values
         String primaryMuscles = (exercise.getPrimaryMuscles() != null) ? String.join(", ", exercise.getPrimaryMuscles()) : "N/A";
@@ -86,25 +116,37 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
     }
 
     @Override
+    public void onViewRecycled(@NonNull ViewHolder holder) {
+        super.onViewRecycled(holder);
+        //For better performance
+        Glide.with(holder.itemView.getContext()).clear(holder.ivExerciseGif);
+    }
+
+    @Override
     public int getItemCount() {
         return exerciseCompleted.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvExerciseName, tvExerciseDescription, tvPrimaryMuscles, tvEquipment, tvSetsReps;
+        TextView tvExerciseName, tvPrimaryMuscles, tvEquipment, tvSetsReps;
         ImageButton ibDone;
         FrameLayout cardBorderContainer;
 
+        ImageView ivExerciseGif;
+        TextView tvFullDescription;
+        CardView cardView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvExerciseName = itemView.findViewById(R.id.tvExerciseName);
-            tvExerciseDescription = itemView.findViewById(R.id.tvExerciseDescription);
             tvPrimaryMuscles = itemView.findViewById(R.id.tvPrimaryMuscles);
             tvEquipment = itemView.findViewById(R.id.tvEquipment);
             tvSetsReps = itemView.findViewById(R.id.tvSetsReps);
             ibDone = itemView.findViewById(R.id.ib_done);
             cardBorderContainer = itemView.findViewById(R.id.cardBorderContainer);
+            ivExerciseGif = itemView.findViewById(R.id.ivExerciseGif);
+            tvFullDescription = itemView.findViewById(R.id.tvFullDescription);
+            cardView = itemView.findViewById(R.id.cv_exercise);
         }
     }
 }
