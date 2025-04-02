@@ -41,7 +41,7 @@ public class WorkoutViewModel extends ViewModel {
                 try {
                     String cleanedJson = response.replaceAll("```json\n|```", "");
                     WorkoutPlan workoutPlan = gson.fromJson(cleanedJson, WorkoutPlan.class);
-                    Log.d("WorkoutPlan", "Plan Name: " + workoutPlan.getPlanName());
+                    Log.d("WorkoutPlan", "response : " + cleanedJson);
 
                     List<WorkoutPlan> currentPlans = workoutPlans.getValue();
                     if (currentPlans == null) {

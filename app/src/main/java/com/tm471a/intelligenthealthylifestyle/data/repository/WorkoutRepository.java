@@ -119,7 +119,7 @@ public class WorkoutRepository {
                     List<WorkoutPlan> retrievedWorkoutPlans = new ArrayList<>();
                     for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
                         WorkoutPlan workoutPlan = doc.toObject(WorkoutPlan.class);
-                        if (workoutPlan != null) {
+                        if (workoutPlan != null && !doc.getId().equals("subscribed_workout_plan")) {
                             Log.d("Firestore", "Document ID: " + doc.getId() + ", Data: " + doc.getData());
                             retrievedWorkoutPlans.add(workoutPlan);
                         } else {
@@ -233,7 +233,7 @@ public class WorkoutRepository {
                             "          \"name\": \"exercise name\", " +
                             "          \"url\": \"gif url link from provided data\", " +
                             "          \"description\": \"detailed instructions\", " +
-                            "          \"primary_muscles\": [\"muscle1\", \"muscle2\"], " +
+                            "          \"primaryMuscles\": [\"muscle1\", \"muscle2\"], " +
                             "          \"equipment\": [\"equipment1\"], " +
                             "          \"sets\": \" 3 \", " +
                             "          \"reps\": \"12 \"" +
@@ -338,7 +338,7 @@ public class WorkoutRepository {
                             "          \"name\": \"exercise name\", " +
                             "          \"url\": \"gif url link from provided data\", " +
                             "          \"description\": \"detailed instructions\", " +
-                            "          \"primary_muscles\": [\"muscle1\", \"muscle2\"], " +
+                            "          \"primaryMuscles\": [\"muscle1\", \"muscle2\"], " +
                             "          \"equipment\": [\"equipment1\"], " +
                             "          \"sets\": \" 3 \", " +
                             "          \"reps\": \"12 \"" +

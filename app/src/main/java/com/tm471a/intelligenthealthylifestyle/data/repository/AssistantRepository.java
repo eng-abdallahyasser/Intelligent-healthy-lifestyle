@@ -155,7 +155,6 @@ public class AssistantRepository {
                 .put("generationConfig", new JSONObject()
                     .put("temperature", 0.9)
                     .put("topP", 0.95)
-                    .put("maxOutputTokens", 200)
                 );
             RequestBody body = RequestBody.create(
                     requestBody.toString(),
@@ -229,7 +228,6 @@ public class AssistantRepository {
                     .put("generationConfig", new JSONObject()
                             .put("temperature", 0.9)
                             .put("topP", 0.95)
-                            .put("maxOutputTokens", 250)
                     );
 
             RequestBody body = RequestBody.create(
