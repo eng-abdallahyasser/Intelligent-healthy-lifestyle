@@ -88,10 +88,8 @@ public class WorkoutViewModel extends ViewModel {
                         try {
                             String cleanedJson = response.replaceAll("```json\n|```", "");
                             Type listType = new TypeToken<List<WorkoutPlan>>() {}.getType();
+                            Log.d("WorkoutPlan", "response : " + cleanedJson);
                             List<WorkoutPlan> generatedtWorkoutPlans = gson.fromJson(cleanedJson, listType);
-                            Log.d("WorkoutPlan", "Plan Name: " + generatedtWorkoutPlans.get(0).getPlanName());
-
-
 
                             // Post the updated list to the LiveData
                             workoutPlans.postValue(generatedtWorkoutPlans);
