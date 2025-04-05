@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
 import com.tm471a.intelligenthealthylifestyle.R;
-import com.tm471a.intelligenthealthylifestyle.features.MainActivity;
 import com.tm471a.intelligenthealthylifestyle.databinding.ActivitySignupBinding;
 
 import java.util.ArrayList;
@@ -141,6 +140,7 @@ public class SignUpActivity extends AppCompatActivity {
     // Helper method to get fitness goals
     private List<String> getSelectedFitnessGoals() {
         List<String> goals = new ArrayList<>();
+        // Add selected goals to the
         if (binding.cbMuscleGain.isChecked()) goals.add("Muscle Gain");
         if (binding.cbWeightLoss.isChecked()) goals.add("Weight Loss");
         if (binding.cbEndurance.isChecked()) goals.add("Endurance");

@@ -131,6 +131,11 @@
                             android:orientation="vertical"
                             android:paddingHorizontal="8dp">
 
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                app:srcCompat="@drawable/carbohydrates" />
+
                             <TextView
                                 style="@style/TextAppearance.MaterialComponents.Caption"
                                 android:layout_width="match_parent"
@@ -160,6 +165,11 @@
                             android:orientation="vertical"
                             android:paddingHorizontal="8dp">
 
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                app:srcCompat="@drawable/proteins" />
+
                             <TextView
                                 style="@style/TextAppearance.MaterialComponents.Caption"
                                 android:layout_width="match_parent"
@@ -188,6 +198,10 @@
                             android:layout_weight="1"
                             android:orientation="vertical"
                             android:paddingHorizontal="8dp">
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                app:srcCompat="@drawable/fats" />
 
                             <TextView
                                 style="@style/TextAppearance.MaterialComponents.Caption"

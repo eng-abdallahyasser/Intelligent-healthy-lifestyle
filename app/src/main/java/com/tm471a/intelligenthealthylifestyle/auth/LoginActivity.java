@@ -2,6 +2,7 @@ package com.tm471a.intelligenthealthylifestyle.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
@@ -65,8 +66,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean validateInputs(String email, String password) {
+
         if (email.isEmpty()) {
             showError("Please enter email");
+            return false;
+        }
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            showError("Please enter valid email");
             return false;
         }
         if (password.isEmpty()) {
